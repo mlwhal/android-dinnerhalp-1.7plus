@@ -1,0 +1,219 @@
+<resources>
+    <string name="app_name">DinnerHalp</string>
+    <string name="package_name">com.gmail.mlwhal.dinnerhalp</string>
+
+    <!--Action bar items  -->
+    <string name="action_add_dinner">Add dinner</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_manage">Manage dinners</string>
+    <string name="action_save">Save</string>
+    <string name="action_search">New search</string>
+    <string name="action_share">Share</string>
+    <string name="action_settings">Settings</string>
+
+    <!--MainActivity tabs  -->
+    <string name="title_section1">Search</string>
+    <string name="title_section2">Manage</string>
+
+    <!--Search fragment  -->
+    <string name="search_title">Search dinners by</string>
+    <string-array name="search_array">
+        <item>Keyword</item>
+        <item>Cooking method</item>
+        <item>Prep/cook time</item>
+        <item>Servings</item>
+        <item>Show all</item>
+    </string-array>
+    <string name="image_item_icon">List item icon</string>
+
+    <!--Manage DB fragment  -->
+    <string name="manage_dinners_title">Manage dinners</string>
+    <string-array name="manage_dinners_array">
+        <item>Add</item>
+        <item>View/edit/delete</item>
+        <item>Delete all</item>
+        <item>Backup database file</item>
+        <item>Restore/import database file</item>
+        <item>Share database file</item>
+    </string-array>
+
+    <!--Delete database alert dialog  -->
+    <string name="delete_db_alert_title">Delete all dinners? There\'s no turning back!</string>
+    <string name="delete_db_cancel_toast">Nothing was deleted</string>
+
+    <!--Backup database toasts -->
+    <string name="backup_db_success">File copied to storage</string>
+    <string name="backup_db_fail">Couldn\'t copy file to storage</string>
+    <string name="backup_db_file_deleted">One old backup was deleted; go to Settings to change
+    how many old backups to keep</string>
+    <string name="backup_db_files_deleted">Old backups were deleted; go to Settings to change how
+    many old backups to keep</string>
+
+    <!--Import database alert dialog  -->
+    <string name="import_alert_title">Import a different database file? This will overwrite your
+        current file.</string>
+    <string name="import_positive_button">Import</string>
+    <string name="import_chooser_title">Import from</string>
+    <string name="import_success_alert">File was imported successfully</string>
+    <string name="import_cancel_alert">Import was cancelled</string>
+
+    <!--Strings for sharing database file  -->
+    <string name="filename_sharedb">dinnerData</string>
+    <string name="filename_full_sharedb">dinnerData.db</string>
+    <string name="date_format">yyyyMMdd_HH-mm</string>
+    <string name="sharedb_title">Share database</string>
+    <string name="sharedb_no_backup">Couldn\'t share the database, something went wrong</string>
+    <string name="intent_sharedb_subject">DinnerHalp database file</string>
+    <string name="intent_sharedb_message">Here\'s the database file from my DinnerHalp app.</string>
+
+    <!--Keyword alert dialog  -->
+    <string name="keyword_alert_title">Search for &#8230;</string>
+    <string name="keyword_hint">Keyword</string>
+
+    <!--Cook method alert dialog  -->
+    <string name="method_alert_title">Method</string>
+    <string-array name="method_array">
+        <item>Stovetop</item>
+        <item>Oven</item>
+        <item>Slow cooker</item>
+        <item>Grill</item>
+    </string-array>
+
+    <!--Cook time alert dialog  -->
+    <string name="time_alert_title">Prep/cook time</string>
+    <string-array name="time_array">
+        <item>Quick (&lt;30 min)</item>
+        <item>Slow (&gt;30 min)</item>
+    </string-array>
+
+    <!--Servings alert dialog  -->
+    <string name="servings_alert_title">Number of meals</string>
+    <string-array name="servings_array">
+        <item>One meal</item>
+        <item>Multiple meals</item>
+    </string-array>
+    <string name="title_activity_add_dinner">AddDinnerActivity</string>
+
+    <!--AddDinnerActivity  -->
+    <string name="add_dinner_title">Add a dinner</string>
+    <string name="update_dinner_title">Update dinner</string>
+    <string name="dinner_add_hint">You can choose how to save \nimages in the Settings menu</string>
+    <string name="dinner_name_hint">Dinner name</string>
+    <!--Label for keyboard completion button -->
+    <string name="button_done">Done</string>
+    <string name="spinner_method_descrip">Choose cooking method</string>
+    <string name="spinner_time_descrip">Choose cooking time</string>
+    <string name="spinner_servings_descrip">Choose number of servings</string>
+    <string name="image_add_picture">Add picture</string>
+    <string name="image_change_picture">Change picture</string>
+    <string name="image_remove_picture">Remove picture</string>
+    <string name="image_remove_alert_title">Remove the image?</string>
+    <string name="image_remove_alert_message">It will no longer be shown when you view
+    this dinner. (This doesn\'t delete the image from your phone, just from the database.)</string>
+    <string name="alert_dialog_remove_img_ok">Remove</string>
+    <string name="toast_image_removed">Image has been removed</string>
+    <string name="recipe_hint">Recipe or keywords</string>
+    <!--String if user has not chosen unique dinner name  -->
+    <string name="toast_not_unique">Dinner name must be unique to be saved!</string>
+    <!--String if user has not given any name to the dinner -->
+    <string name="toast_no_dinner_name">Dinners gotta have names!</string>
+    <!--String for successful save -->
+    <string name="toast_dinner_saved">\u0020saved</string>
+
+    <!--Share text alert dialogs  -->
+    <string name="share_alert_title">Make the first line of shared text the dinner name?</string>
+    <string name="alert_dialog_share_ok">Yes</string>
+    <string name="alert_dialog_share_no">No</string>
+
+    <!--Action buttons-->
+    <string name="button_cancel">Cancel</string>
+    <string name="button_search">Search</string>
+    <string name="button_save">Save</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <!--DinnerListActivity  -->
+    <string name="title_activity_dinner_list">DinnerListActivity</string>
+    <string name="dinner_list_title">Dinners</string>
+    <string name="dinner_list_hint">Press and hold to select multiple dinners</string>
+    <string name="button_help">\?</string>
+    <string name="button_ok">Got It</string>
+    <string name="no_dinners">No dinners found! Tap to add.</string>
+    <string name="image_no_dinners">Tap to add a new dinner</string>
+    <string name="title_activity_view_dinner">ViewDinnerActivity</string>
+    <string name="intent_share_subject">Recipes from DinnerHalp</string>
+    <string name="intent_share_dialog_title">Share to &#8230;</string>
+
+    <!--ViewDinnerActivity-->
+    <string name="view_dinner_title">Dinner name here</string>
+    <string name="dinner_view_hint">You can disable screen timeout in the \nSettings menu</string>
+    <string name="spinner_method">Cooking method</string>
+    <string name="spinner_time">Cooking time</string>
+    <string name="spinner_servings">Servings</string>
+    <string name="image_dinner_picture">Picture of current dinner</string>
+    <string name="text_no_recipe">No recipe or keywords</string>
+    <string name="intent_share_recipe">Share recipe to &#8230;</string>
+
+    <!--Error message for toasts when handling image files throws an exception-->
+    <string name="toast_image_exception">Image can\'t be shown until path is updated</string>
+
+    <!--Delete dinner alert dialogs  -->
+    <string name="delete_alert_title">Delete this dinner?</string>
+    <string name="alert_dialog_delete_ok">Delete</string>
+    <string name="batch_delete_alert_title">Delete selected dinners?</string>
+
+    <!--PreferencesFragment  -->
+    <string name="pref_change_method_title">Custom categories</string>
+    <string name="pref_change_method_sum">Change the list of cooking methods</string>
+
+    <string name="pref_image_size_title">Image size</string>
+    <string name="pref_image_size_sum">Set the size of images when viewing dinner \nCurrently
+    showing %s size</string>
+    <string name="pref_image_size_key">pref_image_size</string>
+    <string name="pref_image_size_dialog_title">Set image size to</string>
+    <string name="pref_image_size_default">40</string>
+
+    <string name="pref_switch_image_storage_title">Save images inside the database</string>
+    <string name="pref_switch_image_storage_sum_off">Images will be linked, not saved; this
+    takes up less space but sometimes links get lost</string>
+    <string name="pref_switch_image_storage_sum_on">Images will be stored in the dinner
+    database; this takes up more space but images won\'t ever get lost</string>
+    <string name="pref_switch_image_storage_key">pref_image_storage</string>
+
+    <string name="pref_backup_number_title">Keeping backup files</string>
+    <string name="pref_backup_number_sum">Set the number of backups to save; the oldest file will be deleted
+    automatically when a new backup is made \nCurrently saving %s</string>
+    <string name="pref_backup_number_key">pref_backup_number</string>
+    <string name="pref_backup_number_dialog_title">Number of files to keep</string>
+    <string name="pref_backup_number_default">5</string>
+
+    <string name="pref_switch_timeout_title">Screen timeout</string>
+    <string name="pref_switch_timeout_sum">Allow screen to timeout when viewing a dinner</string>
+    <string name="pref_switch_timeout_sum_on">Screen will turn off as usual when viewing a dinner</string>
+    <string name="pref_switch_timeout_sum_off">Screen will stay on when viewing a dinner</string>
+    <string name="pref_switch_timeout_key">pref_switch_timeout</string>
+
+    <string name="pref_switch_promode_title">Pro user mode</string>
+    <string name="pref_switch_promode_sum">Hide all on-screen tips</string>
+    <string name="pref_switch_promode_sum_on">On-screen tips are hidden</string>
+    <string name="pref_switch_promode_sum_off">On-screen tips are shown</string>
+    <string name="pref_switch_promode_key">pref_switch_promode</string>
+
+    <string name="pref_aboutapp_title">About DinnerHalp</string>
+
+    <!--AboutAppActivity  -->
+    <string name="title_activity_about_app">AboutAppActivity</string>
+    <string name="about_app_title">About DinnerHalp</string>
+    <string name="about_app_class">com.gmail.mlwhal.dinnerhalp.AboutAppActivity</string>
+    <string name="text_about_app">DinnerHalp 1.7 by Marika Whaley \ncopyright 2015–2023</string>
+    <string name="image_dinnerhalp_icon">DinnerHalp app icon</string>
+
+    <string name="title_activity_settings">Settings</string>
+
+    <!--ImageHandler class  -->
+    <string name="toast_filenotfound">No image file was found, please pick a new one</string>
+    <string name="toast_exception">Sorry, something went wrong with the image</string>
+
+</resources>

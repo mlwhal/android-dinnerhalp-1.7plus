@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="search_icon_array">
+        <item>@drawable/ic_keyword050</item>
+        <item>@drawable/ic_method050</item>
+        <item>@drawable/ic_time050</item>
+        <item>@drawable/ic_servings050</item>
+        <item>@drawable/ic_select_all050</item>
+    </array>
+
+    <array name="manage_dinner_icon_array">
+        <item>@drawable/ic_add_dinner050</item>
+        <item>@drawable/ic_explore_list050</item>
+        <item>@drawable/ic_delete050</item>
+        <item>@drawable/ic_copy050</item>
+        <item>@drawable/ic_import050</item>
+        <item>@drawable/ic_share050</item>
+    </array>
+
+    <string-array name="pref_image_size_array">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+
+    <string-array name="pref_image_size_values">
+        <item>20</item>
+        <item>40</item>
+        <item>60</item>
+    </string-array>
+
+    <string-array name="pref_backup_number_array">
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+        <item>No limit</item>
+    </string-array>
+
+    <string-array name="pref_backup_number_values">
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+        <item>500</item>
+    </string-array>
+
+</resources>

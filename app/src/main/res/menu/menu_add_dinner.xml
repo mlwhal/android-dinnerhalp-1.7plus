@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.gmail.mlwhal.dinnerhalp.AddDinnerActivity">
+
+    <item android:id="@+id/action_cancel"
+        android:icon="@drawable/ic_action_cancel"
+        android:title="@string/action_cancel"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/action_save"
+        android:icon="@drawable/ic_action_accept"
+        android:title="@string/action_save"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/action_search"
+        android:icon="@drawable/ic_action_search"
+        android:title="@string/action_search"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_manage"
+        android:icon="@drawable/ic_action_storage"
+        android:title="@string/action_manage"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+</menu>

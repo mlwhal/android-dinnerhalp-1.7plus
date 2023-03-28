@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--Preference
+        android:key="pref_modify_method"
+        android:title="@string/pref_change_method_title"
+        android:summary="@string/pref_change_method_sum">
+    </Preference-->
+
+    <ListPreference
+        android:key="@string/pref_image_size_key"
+        android:title="@string/pref_image_size_title"
+        android:summary="@string/pref_image_size_sum"
+        android:dialogTitle="@string/pref_image_size_dialog_title"
+        android:entries="@array/pref_image_size_array"
+        android:entryValues="@array/pref_image_size_values"
+        android:defaultValue="@string/pref_image_size_default">
+    </ListPreference>
+
+    <SwitchPreference
+        android:key="@string/pref_switch_image_storage_key"
+        android:title="@string/pref_switch_image_storage_title"
+        android:summaryOff="@string/pref_switch_image_storage_sum_off"
+        android:summaryOn="@string/pref_switch_image_storage_sum_on"
+        android:defaultValue="true">
+    </SwitchPreference>
+
+    <ListPreference
+        android:key="@string/pref_backup_number_key"
+        android:title="@string/pref_backup_number_title"
+        android:summary="@string/pref_backup_number_sum"
+        android:dialogTitle="@string/pref_backup_number_dialog_title"
+        android:entries="@array/pref_backup_number_array"
+        android:entryValues="@array/pref_backup_number_values"
+        android:defaultValue="@string/pref_backup_number_default">
+    </ListPreference>
+
+    <SwitchPreference
+        android:key="@string/pref_switch_timeout_key"
+        android:title="@string/pref_switch_timeout_title"
+        android:summary="@string/pref_switch_timeout_sum"
+        android:summaryOff="@string/pref_switch_timeout_sum_off"
+        android:summaryOn="@string/pref_switch_timeout_sum_on"
+        android:defaultValue="true">
+    </SwitchPreference>
+
+    <SwitchPreference
+        android:key="@string/pref_switch_promode_key"
+        android:title="@string/pref_switch_promode_title"
+        android:summary="@string/pref_switch_promode_sum"
+        android:summaryOff="@string/pref_switch_promode_sum_off"
+        android:summaryOn="@string/pref_switch_promode_sum_on"
+        android:defaultValue="false">
+    </SwitchPreference>
+
+    <Preference
+        android:key="pref_aboutapp"
+        android:title="@string/pref_aboutapp_title">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.gmail.mlwhal.dinnerhalp"
+            android:targetClass="com.gmail.mlwhal.dinnerhalp.AboutAppActivity">
+        </intent>
+    </Preference>
+    
+</PreferenceScreen>

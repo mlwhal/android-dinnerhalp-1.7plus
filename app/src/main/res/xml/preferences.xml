@@ -60,6 +60,8 @@
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.gmail.mlwhal.dinnerhalp"
             android:targetClass="com.gmail.mlwhal.dinnerhalp.AboutAppActivity">
+        <!-- These last two values used to be read from strings.xml, not sure
+           why this is no longer working but I was getting a "not found" error.-->
         </intent>
     </Preference>
     

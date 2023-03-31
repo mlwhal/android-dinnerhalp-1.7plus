@@ -16,6 +16,7 @@ import java.util.Locale;
 import android.app.AlertDialog;
 import android.app.Dialog;
 //import android.app.DialogFragment;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -38,6 +40,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -786,7 +789,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         try {
 //            File storageDir = Environment.getExternalStorageDirectory();
             File storageDir = getApplicationContext().getExternalFilesDir(null);
-//            Log.d(TAG, "FilesDir is " + storageDir);
+            //Todo: Choose cache_dir if shareStatus == true
+            Log.d(TAG, "FilesDir is " + storageDir);
             //Add datestamp to backup file name
             SimpleDateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
             Date now = new Date();
@@ -795,7 +799,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             if (storageDir.canWrite()) {
                 //Get current database file and write a backup file
                 File currentDB = ctx.getDatabasePath(getString(R.string.filename_full_sharedb));
-//                Log.d(TAG, "currentDB = " + currentDB);
+                Log.d(TAG, "currentDB = " + currentDB);
                 backupDB = new File(storageDir, filenameFull);
 
                 if (currentDB.exists()) {
@@ -805,18 +809,19 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     src.close();
                     dst.close();
                     //Toast the backup only when the user has clicked backup, not share
+                    //Todo: Write file to cache_dir if shareStatus==true
                     if (!shareStatus) {
-//                        Log.d(TAG, "File copied to storage");
+                        Log.d(TAG, "File copied to storage");
                         Toast.makeText(getApplicationContext(),
                                 getString(R.string.backup_db_success), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-//                    Log.d(TAG, "No file copied; currentDB does not exist");
+                    Log.d(TAG, "No file copied; currentDB does not exist");
                     Toast.makeText(getApplicationContext(),
                             getString(R.string.backup_db_fail), Toast.LENGTH_SHORT).show();
                 }
             } else {
-//                Log.d(TAG, "Can't write to storageDir; storageDir is " + storageDir);
+                Log.d(TAG, "Can't write to storageDir; storageDir is " + storageDir);
                 Toast.makeText(getApplicationContext(),
                         getString(R.string.backup_db_fail), Toast.LENGTH_SHORT).show();
             }
@@ -946,7 +951,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 //            File storageDir = Environment.getExternalStorageDirectory();
 //            File cacheDir = ctx.getCacheDir();
             File storageDir = ctx.getExternalFilesDir(null);
-//            Log.d(TAG, "shareDB: storageDir is " + storageDir);
+            Log.d(TAG, "shareDB: storageDir is " + storageDir);
 
             //Make a new copy of the database and set it as the file to be sent
             String filename = copyDBtoStorage(ctx, true);
@@ -955,14 +960,34 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             File backupDB = new File(storageDir, filename);
 //            Log.d(TAG, "shareDB: backupDB is " + backupDB);
 
-            //Create and launch share intent
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType("*/*");
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.intent_sharedb_subject));
-            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.intent_sharedb_message));
-            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(backupDB));
-            ctx.startActivity(Intent.createChooser(shareIntent, getString(R.string.sharedb_title)));
+            //Get the Uri for the file to prepare for the Intent
+            Uri fileUri = null;
+            try {
+                fileUri = FileProvider.getUriForFile(MainActivity.this,
+                        "com.gmail.mlwhal.dinnerhalp.fileprovider", backupDB);
+                Log.d(TAG, "fileUri has been created: " + fileUri);
+            } catch (IllegalArgumentException e) {
+                Toast.makeText(getApplicationContext(),
+                        getString(R.string.sharedb_no_backup), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
 
+            //Create and launch share intent
+            if (fileUri != null) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("*/*");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.intent_sharedb_subject));
+                shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.intent_sharedb_message));
+//            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(backupDB));
+                //Grant permission to read fileUri
+                shareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                shareIntent.setClipData(ClipData.newRawUri("", fileUri));
+                shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+                ctx.startActivity(Intent.createChooser(shareIntent, getString(R.string.sharedb_title)));
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        getString(R.string.sharedb_no_backup), Toast.LENGTH_LONG).show();
+            }
             //Delete cached file once shared
             //Todo: This gets called too soon; need another strategy
 //            backupDB.delete();

@@ -57,7 +57,7 @@
     <string name="import_positive_button">Import</string>
     <string name="import_chooser_title">Import from</string>
     <string name="import_success_alert">File was imported successfully</string>
-    <string name="import_cancel_alert">Import was cancelled</string>
+    <string name="import_cancel_alert">Import was canceled</string>
 
     <!--Strings for sharing database file  -->
     <string name="filename_sharedb">dinnerData</string>

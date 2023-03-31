@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<filepaths xmlns:android="http://schemas.android.com/apk/res/android">
+    <paths>
+        <files-path
+            name="files_dir"
+            path="/">
+        </files-path>
+
+        <files-path
+            path="data/"
+            name="data_dir"/>
+
+        <cache-path
+            path="/"
+            name="cache_dir" />
+
+        <external-files-path
+            name="external_files_dir"
+            path="/" />
+    </paths>
+</filepaths>

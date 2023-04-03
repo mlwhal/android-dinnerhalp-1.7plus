@@ -1,6 +1,6 @@
 package com.gmail.mlwhal.dinnerhalp;
 
-import android.app.AlertDialog;
+//import android.app.AlertDialog;
 import android.app.Dialog;
 //import android.app.DialogFragment;
 import android.content.Context;
@@ -30,6 +30,8 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -644,7 +646,7 @@ public class AddDinnerActivity extends AppCompatActivity {
         public Dialog onCreateDialog (Bundle savedInstanceState) {
             int title = getArguments().getInt("title");
 
-            return new AlertDialog.Builder(getActivity())
+            return new MaterialAlertDialogBuilder(getActivity(), R.style.Theme_DinnerHalp_NightAlertDialog)
                     .setTitle(title)
                     .setPositiveButton(R.string.alert_dialog_share_ok,
                             new DialogInterface.OnClickListener() {
@@ -704,7 +706,7 @@ public class AddDinnerActivity extends AppCompatActivity {
             int title = getArguments().getInt("title");
             int message = getArguments().getInt("message");
 
-            return new AlertDialog.Builder(getActivity())
+            return new MaterialAlertDialogBuilder(getActivity(), R.style.Theme_DinnerHalp_NightAlertDialog)
                     .setTitle(title)
                     .setMessage(message)
                     .setPositiveButton(R.string.alert_dialog_remove_img_ok,

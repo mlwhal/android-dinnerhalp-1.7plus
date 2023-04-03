@@ -1,16 +1,51 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.MyApplication" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.DinnerHalp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
         <item name="colorOnPrimary">@color/colorKnockout</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/colorPrimaryDark</item>
-        <!--item name="colorSecondaryVariant">@color/teal_200</item-->
         <item name="colorOnSecondary">@color/colorKnockout</item>
+
+        <!-- Customize your theme here. -->
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
-        <!-- Customize your theme here. -->
+        <!-- Color for toggles that are on in Settings -->
+        <item name="android:colorControlActivated">@color/colorDefaultText</item>
+    </style>
+
+    <!--Right now the night mode keyword dialog is still light background, doesn't match other search pickers.
+     The code below didn't fix it, though the text did change to the off-white -->
+    <style name="Theme.DinnerHalp.CustomAlertDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="colorSurface">@color/colorBackground</item>
+        <item name="colorPrimary">@color/colorDefaultText</item>
+        <item name="android:borderlessButtonStyle">@style/Widget.Custom.Button.Borderless</item>
+    </style>
+
+    <style name="Theme.DinnerHalp.NightAlertDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <!-- Set color of action buttons -->
+        <item name="colorPrimary">@color/colorDefaultText</item>
+    </style>
+
+    <style name="Widget.Custom.Button.Borderless" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <!--item name="colorPrimary">@color/colorDefaultText</item-->
+    </style>
+
+    <style name="HeaderText">
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">@color/colorDefaultText</item>
+        <item name="android:textIsSelectable">true</item>
+        <item name="android:clickable">false</item>
+    </style>
+
+    <style name="HelpButton">
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/colorKnockout</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 </resources>

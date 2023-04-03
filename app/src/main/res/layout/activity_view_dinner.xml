@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:text="@string/button_help"
-            style="@style/MedButton"/>
+            style="@style/HelpButton"/>
 
     </RelativeLayout>
 

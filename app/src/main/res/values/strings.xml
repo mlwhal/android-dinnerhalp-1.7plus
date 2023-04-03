@@ -168,6 +168,11 @@
     <string name="pref_change_method_title">Custom categories</string>
     <string name="pref_change_method_sum">Change the list of cooking methods</string>
 
+    <!--string name="pref_darkmode_title">Set the display mode</string>
+    <string name="pref_darkmode_off_title">Never use dark mode</string>
+    <string name="pref_darkmode_on_title">Always use dark mode</string>
+    <string name="pref_darkmode_auto">Match the app mode to phone settings</string-->
+
     <string name="pref_image_size_title">Image size</string>
     <string name="pref_image_size_sum">Set the size of images when viewing dinner \nCurrently
     showing %s size</string>

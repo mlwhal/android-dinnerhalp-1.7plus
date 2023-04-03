@@ -17,6 +17,16 @@
         <item>@drawable/ic_share050</item>
     </array>
 
+    <!--string-array name="pref_darktheme_array">
+        <item>@string/pref_darkmode_off_title</item>
+        <item>@string/pref_darkmode_on_title</item>
+        <item>@string/pref_darkmode_auto</item>
+    </string-array>
+
+    <string-array name="pref_darktheme_values">
+        <item></item>
+    </string-array-->
+
     <string-array name="pref_image_size_array">
         <item>Small</item>
         <item>Medium</item>

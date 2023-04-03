@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:text="@string/button_help"
-            style="@style/MedButton"/>
+            style="@style/HelpButton"/>
 
     </RelativeLayout>
 
@@ -70,7 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:paddingStart="-32dp"
+            android:paddingStart="0dp"
             android:paddingEnd="0dp"
             android:src="@drawable/ic_add_dinner"
             style="?android:borderlessButtonStyle"

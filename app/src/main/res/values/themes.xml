@@ -1,31 +1,31 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="Theme.DinnerHalp" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorSecondary">@color/colorPrimaryDark</item>
         <item name="colorOnPrimary">@color/colorKnockout</item>
         <item name="colorOnSecondary">@color/colorKnockout</item>
 
-        <item name="android:alertDialogTheme">@style/CustomAlertDialogTheme</item>
+        <item name="android:alertDialogTheme">@style/Theme.DinnerHalp.CustomAlertDialog</item>
     </style>
 
-        <style name="HeaderText">
-            <item name="android:textSize">25sp</item>
-            <item name="android:textColor">@color/colorPrimary</item>
-            <item name="android:textIsSelectable">true</item>
-            <item name="android:clickable">false</item>
-        </style>
+    <style name="HeaderText">
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textIsSelectable">true</item>
+        <item name="android:clickable">false</item>
+    </style>
 
-        <style name="ListText">
-            <item name="android:textSize">25sp</item>
-            <item name="android:textColor">@color/colorDefaultText</item>
-            <item name="android:layout_width">match_parent</item>
-            <item name="android:layout_height">wrap_content</item>
-            <item name="android:paddingTop">8dp</item>
-            <item name="android:paddingBottom">8dp</item>
-        </style>
+    <style name="ListText">
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">@color/colorDefaultText</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
 
     <style name="DinnerListText">
         <item name="android:textSize">20sp</item>
@@ -40,7 +40,7 @@
     </style>
 
     <style name="SmallButton">
-        <item name="android:background">@color/colorHintText</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
         <item name="android:padding">2dp</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/colorKnockout</item>
@@ -48,7 +48,7 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="MedButton">
+    <style name="HelpButton">
         <item name="android:background">@color/colorPrimaryDark</item>
         <item name="android:padding">4dp</item>
         <item name="android:textSize">15sp</item>
@@ -66,8 +66,17 @@
         <item name="android:textIsSelectable">true</item>
     </style>
 
-    <style name="CustomAlertDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+    <style name="Theme.DinnerHalp.CustomAlertDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
         <item name="android:borderlessButtonStyle">@style/Widget.Custom.Button.Borderless</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+    </style>
+
+    <style name="Theme.DinnerHalp.CustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabBackground">@color/colorBackground</item>
+        <item name="tabIndicator">@color/colorAccent</item>
+        <item name="tabIndicatorColor">@color/colorAccent</item>
+        <item name="tabSelectedTextColor">@color/colorKnockout</item>
+        <item name="tabTextColor">@color/colorUnselectedText</item>
     </style>
 
     <style name="Widget.Custom.Button.Borderless" parent="Widget.MaterialComponents.Button.UnelevatedButton">

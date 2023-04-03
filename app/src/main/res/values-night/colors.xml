@@ -3,10 +3,11 @@
     <color name="colorPrimary">#b71c1c</color>
     <color name="colorPrimaryDark">#7f0000</color>
     <color name="colorAccent">#b71c1c</color>
+    <color name="colorBackground">#333333</color>
 
-    <color name="colorDefaultText">#EEEEEE</color>
-    <color name="colorHintText">#FFEEEE</color>
-    <color name="colorKnockout">#000000</color>
+    <color name="colorDefaultText">#F9EDED</color>
+    <color name="colorHintText">#F9EDED</color>
+    <color name="colorKnockout">#F9EDED</color>
 
 
 </resources>

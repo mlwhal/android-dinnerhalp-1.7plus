@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -372,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             int title = getArguments().getInt("title");
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialogTheme);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Theme_DinnerHalp_CustomAlertDialog);
             //Get the layout inflater
             LayoutInflater inflater = requireActivity().getLayoutInflater();
             //Cast the Dialog as a View so I can get text out of the EditText
@@ -670,7 +671,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             int title = getArguments().getInt("title");
 
-            return new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialogTheme)
+            return new AlertDialog.Builder(getActivity(), R.style.Theme_DinnerHalp_CustomAlertDialog)
                     .setMessage(title)
                     .setPositiveButton(R.string.alert_dialog_delete_ok,
                             new DialogInterface.OnClickListener() {
@@ -751,7 +752,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             int title = getArguments().getInt("title");
 
-            return new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialogTheme)
+            return new AlertDialog.Builder(getActivity(), R.style.Theme_DinnerHalp_CustomAlertDialog)
                     .setMessage(title)
                     .setPositiveButton(R.string.import_positive_button,
                             new DialogInterface.OnClickListener() {

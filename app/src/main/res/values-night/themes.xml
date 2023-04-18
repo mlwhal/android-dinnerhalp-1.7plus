@@ -13,21 +13,46 @@
         <!-- Customize your theme here. -->
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
-        <!-- Color for toggles that are on in Settings -->
+        <item name="actionBarTheme">@style/ThemeOverlay.DinnerHalp.ActionBar</item>
+        <item name="alertDialogTheme">@style/Theme.DinnerHalp.NightAlertDialog</item>
+        <!-- Color for active toggles and edit text fields everywhere but DinnerListActivity -->
         <item name="android:colorControlActivated">@color/colorDefaultText</item>
     </style>
 
-    <!--Right now the night mode keyword dialog is still light background, doesn't match other search pickers.
-     The code below didn't fix it, though the text did change to the off-white -->
+    <!-- Custom theme for action bar -->
+    <style name="ThemeOverlay.DinnerHalp.ActionBar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        <item name="colorPrimary">@color/colorBackground</item>
+        <item name="android:textColor">@color/colorDefaultText</item>
+<!--    ToDo: the tabs need to be styled with selected text and bg color -->
+    </style>
+
+    <!-- Specific theme for DinnerListActivity to handle long press selected color -->
+    <style name="Theme.DinnerHalp.DinnerListActivity" parent="Theme.DinnerHalp">
+        <item name="android:actionModeBackground">@color/colorPrimaryDark</item>
+        <item name="android:colorControlActivated">@color/colorLongPressSelected</item>
+        <!-- Color at bottom of action bar during CAB mode -->
+        <item name="android:colorLongPressedHighlight">@color/colorPrimaryDark</item>
+    </style>
+
+    <!-- Not sure whether this theme is being used anywhere; it was in day mode themes -->
+    <style name="Theme.DinnerHalp.CustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabBackground">@color/colorBackground</item>
+        <item name="tabIndicator">@color/colorPrimaryDark</item>
+        <item name="tabIndicatorColor">@color/colorPrimaryDark</item>
+        <item name="tabSelectedTextColor">@color/colorKnockout</item>
+        <item name="tabTextColor">@color/colorUnselectedText</item>
+    </style>
+
+    <!-- Night mode alert dialog styles (dialogs in SearchFragment and ManageFragment) -->
     <style name="Theme.DinnerHalp.CustomAlertDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
-        <item name="colorSurface">@color/colorBackground</item>
         <item name="colorPrimary">@color/colorDefaultText</item>
         <item name="android:borderlessButtonStyle">@style/Widget.Custom.Button.Borderless</item>
     </style>
 
     <style name="Theme.DinnerHalp.NightAlertDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
-        <!-- Set color of action buttons -->
         <item name="colorPrimary">@color/colorDefaultText</item>
+        <!-- colorAccent controls active radio button -->
+        <item name="colorAccent">@color/colorDefaultText</item>
     </style>
 
     <style name="Widget.Custom.Button.Borderless" parent="Widget.MaterialComponents.Button.UnelevatedButton">
@@ -45,7 +70,7 @@
         <item name="android:background">@color/colorPrimaryDark</item>
         <item name="android:padding">4dp</item>
         <item name="android:textSize">15sp</item>
-        <item name="android:textColor">@color/colorKnockout</item>
+        <item name="android:textColor">@color/colorDefaultText</item>
         <item name="android:textAllCaps">true</item>
     </style>
 </resources>

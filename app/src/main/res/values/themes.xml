@@ -7,8 +7,22 @@
         <item name="colorSecondary">@color/colorPrimaryDark</item>
         <item name="colorOnPrimary">@color/colorKnockout</item>
         <item name="colorOnSecondary">@color/colorKnockout</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.DinnerHalp.ActionBar</item>
 
         <item name="android:alertDialogTheme">@style/Theme.DinnerHalp.CustomAlertDialog</item>
+    </style>
+
+    <!-- Custom theme for action bar -->
+    <style name="ThemeOverlay.DinnerHalp.ActionBar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        </style>
+
+    <!-- Custom theme for DinnerListActivity; is called in AndroidManifest -->
+    <style name="Theme.DinnerHalp.DinnerListActivity" parent="Theme.DinnerHalp">
+        <item name="android:actionModeBackground">@color/colorPrimaryDark</item>
+        <item name="android:colorControlActivated">@color/colorLongPressSelected</item>
+        <!-- Color at bottom of action bar during CAB mode -->
+        <item name="android:colorLongPressedHighlight">@color/colorPrimaryDark</item>
     </style>
 
     <style name="HeaderText">

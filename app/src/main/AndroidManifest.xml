@@ -51,7 +51,8 @@
 
         <activity
             android:name=".DinnerListActivity"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.DinnerHalp.DinnerListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />

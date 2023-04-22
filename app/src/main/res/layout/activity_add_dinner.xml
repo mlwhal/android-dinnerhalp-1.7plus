@@ -15,19 +15,20 @@
 
         <TextView
             android:id="@+id/section_label"
-            style="@style/HeaderText"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/touch_target_min"
             android:paddingBottom="8dp"
-            android:text="@string/add_dinner_title" />
+            android:text="@string/add_dinner_title"
+            style="@style/HeaderText" />
 
         <TextView
             android:id="@id/button_help"
-            style="@style/HelpButton"
+            android:background="@drawable/rounded_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:text="@string/button_help" />
+            android:text="@string/button_help"
+            style="@style/HelpButton" />
 
     </RelativeLayout>
 
@@ -48,6 +49,7 @@
 
         <TextView
             android:id="@+id/button_ok"
+            android:background="@drawable/rounded_button"
             style="@style/SmallButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

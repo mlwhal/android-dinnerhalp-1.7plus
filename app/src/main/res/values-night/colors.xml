@@ -9,6 +9,7 @@
     <color name="colorHintText">#F9EDED</color>
     <color name="colorKnockout">#F9EDED</color>
     <color name="colorLongPressSelected">#7f0000</color>
+    <color name="colorTextButton">@color/colorPrimary</color>
     <color name="colorUnselectedText">#DDDDDD</color>
 
 </resources>

@@ -10,6 +10,7 @@
     <color name="colorUnselectedText">#DDDDDD</color>
     <color name="colorKnockout">#FFFFFF</color>
     <color name="colorLongPressSelected">#F74A4A</color>
+    <color name="colorTextButton">@color/colorPrimaryDark</color>
 
 
 </resources>

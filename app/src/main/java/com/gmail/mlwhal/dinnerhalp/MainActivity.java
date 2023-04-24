@@ -791,9 +791,13 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         File backupDB;
         String filenameFull = null;    //Declared outside of try block so the value can be returned
         try {
-//            File storageDir = Environment.getExternalStorageDirectory();
-            File storageDir = getApplicationContext().getExternalFilesDir(null);
-            //Todo: Choose cache_dir if shareStatus == true
+            File storageDir;
+            //Choose cache_dir if shareStatus == true; file can be temporary
+            if (shareStatus) {
+                storageDir = getApplicationContext().getCacheDir();
+            } else {
+                storageDir = getApplicationContext().getExternalFilesDir(null);
+            }
             Log.d(TAG, "FilesDir is " + storageDir);
             //Add datestamp to backup file name
             SimpleDateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
@@ -813,7 +817,6 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     src.close();
                     dst.close();
                     //Toast the backup only when the user has clicked backup, not share
-                    //Todo: Write file to cache_dir if shareStatus==true
                     if (!shareStatus) {
                         Log.d(TAG, "File copied to storage");
                         Toast.makeText(getApplicationContext(),
@@ -946,15 +949,14 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
     }
 
-    //Method to share/email database file; makes a backup file first to ensure that the
+    //Method to share/email database file; makes a backup file to cache first to ensure that the
     //current version of the file is sent
-    //Todo: Is it possible to backup the file to cache and then delete it once shared; use getCacheDir()?
     public void shareDB(Context ctx) {
         try {
             //Get path for readable database file
-//            File storageDir = Environment.getExternalStorageDirectory();
-//            File cacheDir = ctx.getCacheDir();
-            File storageDir = ctx.getExternalFilesDir(null);
+            //Cache directory is used because this is not trying to save a backup
+            File storageDir = ctx.getCacheDir();
+//            File storageDir = ctx.getExternalFilesDir(null);
             Log.d(TAG, "shareDB: storageDir is " + storageDir);
 
             //Make a new copy of the database and set it as the file to be sent

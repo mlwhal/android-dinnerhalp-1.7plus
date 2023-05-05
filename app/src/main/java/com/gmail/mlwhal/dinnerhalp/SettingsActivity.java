@@ -1,15 +1,48 @@
 package com.gmail.mlwhal.dinnerhalp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Objects;
+
 
 public class SettingsActivity extends AppCompatActivity {
+
+    private static final String TAG = SettingsActivity.class.getSimpleName();
+    static SharedPreferences mSharedPrefs;
+    //Set up a change listener to deal with changes to night mode preference
+    private static final SharedPreferences.OnSharedPreferenceChangeListener mListener = new
+            SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            Log.d(TAG, "Prefs changed; key is " + key);
+            if (key.equals("pref_theme") ) {
+                String darkModePref = sharedPreferences.getString(key, "MODE_NIGHT_FOLLOW_SYSTEM");
+                switch (darkModePref) {
+                    case "MODE_NIGHT_FOLLOW_SYSTEM":
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);;
+                        break;
+                    case "MODE_NIGHT_NO":
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        break;
+                    case "MODE_NIGHT_YES":
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        break;
+                }
+                Log.d(TAG, "Night mode set to " + darkModePref);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +99,29 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-            //Load preferences from an XML resource
-            addPreferencesFromResource(R.xml.preferences);
+            //Check API version; below 29 there is no dark mode so the prefs omit it
+//            Log.d(TAG, "Build code is " + Build.VERSION.SDK_INT);
+            if (Build.VERSION.SDK_INT >= 29) {
+                //Load preferences from an XML resource
+                addPreferencesFromResource(R.xml.preferences);
+            } else {
+                addPreferencesFromResource(R.xml.preferences_pre29);
+            }
         }
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 
+        }
+
+        //onResume is where to register the theme change listener
+        //Note that when the theme is changed, the app automatically relaunches any live activities
+        @Override
+        public void onResume () {
+            Log.d(TAG, "onResume has fired");
+            mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
+            mSharedPrefs.registerOnSharedPreferenceChangeListener(mListener);
+            super.onResume();
         }
 
     }

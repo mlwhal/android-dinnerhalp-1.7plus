@@ -75,6 +75,10 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     //Track which tab to show when navigating from other activities
     public int mFragmentTracker = 0;
 
+    //Two shared preferences need tracking: mBackupNum and darkModePref
+    int mBackupNum;
+    String mDarkModePref;
+
     //TAG String used for logging
     private static final String TAG = MainActivity.class.getSimpleName();
     static final int PICK_IMPORT_FILE_REQUEST = 1;
@@ -141,6 +145,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         //https://developer.android.com/guide/topics/ui/settings.html)
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
+        //Get current shared prefs for number of backups and dark mode status
+        checkSharedPrefs();
     }
 
 
@@ -842,7 +848,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         //Check shared preferences and delete any extra stored backup files
         //This only happens when the user wants to backup, not share, the db
         if (!shareStatus) {
-            int fileNumberPref = checkSharedPrefs();
+//            int fileNumberPref = checkSharedPrefs();
 //            Log.d(TAG, "copyDBtoStorage: fileNumberPref = " + fileNumberPref);
 
             try {
@@ -866,7 +872,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 //                        Log.d(TAG, "Postsorted: URL is " + files[i].toString());
 //                    }
                     //Calculate how many files beyond the preferred number there are (if any)
-                    int extraFiles = lngth - fileNumberPref;
+                    int extraFiles = lngth - mBackupNum;
                     boolean filesDeleted;
                     //Track how many files get deleted successfully
                     int filesDeletedCount = 0;
@@ -1006,11 +1012,30 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     }
 
     //Check shared preferences to find out how many backup files to keep; returns the int
-    public int checkSharedPrefs() {
+    public void checkSharedPrefs() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        return Integer.parseInt(sharedPref.getString(getResources()
-                .getString(R.string.pref_backup_number_key),
+        //Get current number of backups to keep (used in copyDBtoStorage()
+        mBackupNum = Integer.parseInt(sharedPref.getString(getResources()
+                        .getString(R.string.pref_backup_number_key),
                 getResources().getString(R.string.pref_backup_number_default)));
+        Log.d(TAG, "checkSharedPrefs: Number of backups is set to " + mBackupNum);
+
+        //Set theme to match current shared preference; this is needed when theme doesn't match system
+        mDarkModePref = sharedPref.getString(getResources()
+                        .getString(R.string.pref_theme_key),
+                getResources().getString(R.string.pref_theme_default));
+        switch (mDarkModePref) {
+            case "MODE_NIGHT_FOLLOW_SYSTEM":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);;
+                break;
+            case "MODE_NIGHT_NO":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case "MODE_NIGHT_YES":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+        }
+        Log.d(TAG, "checkSharedPrefs: Night mode set to " + mDarkModePref);
     }
 }

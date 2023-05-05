@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+<!-- These are preferences for API before 29; so no theme-changing preference.  -->
     <!--Preference
         android:key="pref_modify_method"
         android:title="@string/pref_change_method_title"
@@ -53,7 +54,7 @@
         android:defaultValue="false">
     </SwitchPreference>
 
-    <ListPreference
+    <!--ListPreference
         android:key="@string/pref_theme_key"
         android:title="@string/pref_theme_title"
         android:summary="@string/pref_theme_sum"
@@ -61,7 +62,7 @@
         android:entries="@array/pref_theme_array"
         android:entryValues="@array/pref_theme_values"
         android:defaultValue="@string/pref_theme_default">
-    </ListPreference>
+    </ListPreference-->
 
     <Preference
         android:key="pref_aboutapp"

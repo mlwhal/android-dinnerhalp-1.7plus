@@ -17,16 +17,6 @@
         <item>@drawable/ic_share050</item>
     </array>
 
-    <!--string-array name="pref_darktheme_array">
-        <item>@string/pref_darkmode_off_title</item>
-        <item>@string/pref_darkmode_on_title</item>
-        <item>@string/pref_darkmode_auto</item>
-    </string-array>
-
-    <string-array name="pref_darktheme_values">
-        <item></item>
-    </string-array-->
-
     <string-array name="pref_image_size_array">
         <item>Small</item>
         <item>Medium</item>
@@ -55,6 +45,18 @@
         <item>10</item>
         <item>20</item>
         <item>500</item>
+    </string-array>
+
+    <string-array name="pref_theme_array">
+        <item>Match the system theme</item>
+        <item>Always light</item>
+        <item>Always dark</item>
+    </string-array>
+
+    <string-array name="pref_theme_values">
+        <item>MODE_NIGHT_FOLLOW_SYSTEM</item>
+        <item>MODE_NIGHT_NO</item>
+        <item>MODE_NIGHT_YES</item>
     </string-array>
 
 </resources>

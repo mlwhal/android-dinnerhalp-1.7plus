@@ -168,11 +168,6 @@
     <string name="pref_change_method_title">Custom categories</string>
     <string name="pref_change_method_sum">Change the list of cooking methods</string>
 
-    <!--string name="pref_darkmode_title">Set the display mode</string>
-    <string name="pref_darkmode_off_title">Never use dark mode</string>
-    <string name="pref_darkmode_on_title">Always use dark mode</string>
-    <string name="pref_darkmode_auto">Match the app mode to phone settings</string-->
-
     <string name="pref_image_size_title">Image size</string>
     <string name="pref_image_size_sum">Set the size of images when viewing dinner \nCurrently
     showing %s size</string>
@@ -205,6 +200,12 @@
     <string name="pref_switch_promode_sum_on">On-screen tips are hidden</string>
     <string name="pref_switch_promode_sum_off">On-screen tips are shown</string>
     <string name="pref_switch_promode_key">pref_switch_promode</string>
+
+    <string name="pref_theme_title">App theme</string>
+    <string name="pref_theme_sum">Change the app theme \nCurrently set to: %s</string>
+    <string name="pref_theme_key">pref_theme</string>
+    <string name="pref_theme_dialog_title">Set app theme to</string>
+    <string name="pref_theme_default">MODE_NIGHT_FOLLOW_SYSTEM</string>
 
     <string name="pref_aboutapp_title">About DinnerHalp</string>
 

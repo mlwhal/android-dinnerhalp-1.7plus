@@ -148,7 +148,7 @@
 
     <!--ViewDinnerActivity-->
     <string name="view_dinner_title">Dinner name here</string>
-    <string name="dinner_view_hint">You can disable screen timeout in the \nSettings menu</string>
+    <string name="dinner_view_hint">You can control screen timeout in the \nSettings menu</string>
     <string name="spinner_method">Cooking method</string>
     <string name="spinner_time">Cooking time</string>
     <string name="spinner_servings">Servings</string>

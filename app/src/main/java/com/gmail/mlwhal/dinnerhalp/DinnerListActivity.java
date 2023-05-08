@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -65,7 +66,9 @@ public class DinnerListActivity extends AppCompatActivity {
         hintText = findViewById(R.id.hint_text);
         okButton = findViewById(R.id.button_ok);
 
+        //helpButton visibility is determined in fillData()
         //Hint text and button are never shown onCreate
+        helpButton.setVisibility(View.GONE);
         hintText.setVisibility(View.GONE);
         okButton.setVisibility(View.GONE);
 
@@ -211,6 +214,11 @@ public class DinnerListActivity extends AppCompatActivity {
             }
         });
 
+        //Show the help button only when there are dinners in the listview
+        if (dinners.getCount() > 0) {
+            helpButton.setVisibility(View.VISIBLE);
+        }
+
         // Click listeners for listview items
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -329,10 +337,9 @@ public class DinnerListActivity extends AppCompatActivity {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean proModePref = sharedPref.getBoolean(getResources()
                 .getString(R.string.pref_switch_promode_key), true);
-        if (proModePref) {
-            helpButton.setVisibility(View.GONE);
-        } else {
-            helpButton.setVisibility(View.VISIBLE);
+        if (!proModePref) {
+            //Set up clicks for help and other buttons
+            //Initial visibility of help button is determined in fillData()
             helpButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

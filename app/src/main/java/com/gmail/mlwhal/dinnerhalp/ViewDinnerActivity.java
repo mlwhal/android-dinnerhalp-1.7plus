@@ -100,11 +100,11 @@ public class ViewDinnerActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_view_dinner, menu);
 
-        // Get the action provider associated with the menu item whose id is share
-        MenuItem shareItem = menu.findItem(R.id.action_share);
-        ShareActionProvider mShareActionProvider =
-                (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
-        mShareActionProvider.setShareIntent(getShareIntent());
+//        // Get the action provider associated with the menu item whose id is share
+//        MenuItem shareItem = menu.findItem(R.id.action_share);
+//        ShareActionProvider mShareActionProvider =
+//                (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+//        mShareActionProvider.setShareIntent(getShareIntent());
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -131,7 +131,8 @@ public class ViewDinnerActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_share:
-                //Doesn't need anything because clicks are handled by ShareActionProvider
+               shareDinner();
+//                Log.d(TAG, "Share button pushed");
                 return true;
 
             case R.id.action_search:
@@ -288,12 +289,28 @@ public class ViewDinnerActivity extends AppCompatActivity {
     }
 
     //Method to build an intent to share dinner names/recipes
-    private Intent getShareIntent() {
+    //No longer needed because share action provider isn't used anymore
+//    private Intent getShareIntent() {
+//        String dinnerTitle = mTitleText.getText().toString();
+//        String dinnerRecipe = mRecipeText.getText().toString();
+//
+//        //Get title for shareIntent; ShareActionProvider doesn't use this
+////        CharSequence shareTitle = getResources().getString(R.string.intent_share_recipe);
+//
+//        //Set up shareIntent and put dinner title and recipe in the intent as extras
+//        Intent shareIntent = new Intent();
+//        shareIntent.setAction(Intent.ACTION_SEND);
+//        shareIntent.setType("text/plain");
+//        shareIntent.putExtra(Intent.EXTRA_SUBJECT, dinnerTitle);
+//        shareIntent.putExtra(Intent.EXTRA_TEXT, dinnerRecipe);
+//
+//        return shareIntent;
+//    }
+
+    //Method to share dinner name/recipe
+    private void shareDinner() {
         String dinnerTitle = mTitleText.getText().toString();
         String dinnerRecipe = mRecipeText.getText().toString();
-
-        //Get title for shareIntent; ShareActionProvider doesn't use this
-//        CharSequence shareTitle = getResources().getString(R.string.intent_share_recipe);
 
         //Set up shareIntent and put dinner title and recipe in the intent as extras
         Intent shareIntent = new Intent();
@@ -302,7 +319,15 @@ public class ViewDinnerActivity extends AppCompatActivity {
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, dinnerTitle);
         shareIntent.putExtra(Intent.EXTRA_TEXT, dinnerRecipe);
 
-        return shareIntent;
+        //Launch a chooser activity
+        Intent sendIntent = Intent.createChooser(shareIntent, null);
+        Log.d(TAG, "shareDinner: Chooser being created");
+        if (shareIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(sendIntent);
+        } else {
+            Toast.makeText(getApplicationContext(), "Please download an app before trying to share",
+                    Toast.LENGTH_SHORT).show();
+        }
 
     }
 

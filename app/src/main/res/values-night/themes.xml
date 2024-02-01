@@ -36,10 +36,13 @@
     <!-- Not sure whether this theme is being used anywhere; it was in day mode themes -->
     <style name="Theme.DinnerHalp.CustomTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabBackground">@color/colorBackground</item>
+        <item name="dividerColor">@color/colorUnselectedText</item>
         <item name="tabIndicator">@color/colorKnockout</item>
         <item name="tabIndicatorColor">@color/colorKnockout</item>
         <item name="tabSelectedTextColor">@color/colorKnockout</item>
         <item name="tabTextColor">@color/colorUnselectedText</item>
+<!--        Note that in the light theme, the unselected tab text uses colorOnSurface
+            but tabTextColor still seems to work here -->
     </style>
 
     <!-- Night mode alert dialog styles (dialogs in SearchFragment and ManageFragment) -->

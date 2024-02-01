@@ -86,11 +86,15 @@
     </style>
 
     <style name="Theme.DinnerHalp.CustomTabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabBackground">@color/colorBackground</item>
+        <item name="tabBackground">@color/colorPrimaryDark</item>
+        <item name="dividerColor">@color/colorUnselectedText</item>
         <item name="tabIndicator">@color/colorAccent</item>
         <item name="tabIndicatorColor">@color/colorAccent</item>
         <item name="tabSelectedTextColor">@color/colorKnockout</item>
-        <item name="tabTextColor">@color/colorUnselectedText</item>
+        <!--        <item name="tabTextColor">@color/colorUnselectedText</item>-->
+        <!--        No longer working, now using colorOnSurface for unselected tab text -->
+        <item name="tabTextAppearance">@style/TextAppearance.Design.Tab</item>
+        <item name="colorOnSurface">@color/colorUnselectedText</item>
     </style>
 
     <style name="Widget.Custom.Button.Borderless" parent="Widget.MaterialComponents.Button.UnelevatedButton">

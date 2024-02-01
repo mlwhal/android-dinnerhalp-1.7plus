@@ -16,6 +16,7 @@
     <!--MainActivity tabs  -->
     <string name="title_section1">Search</string>
     <string name="title_section2">Manage</string>
+    <string name="tab_layout">Tab Layout goes here</string>
 
     <!--Search fragment  -->
     <string name="search_title">Search dinners by</string>
@@ -213,7 +214,7 @@
     <string name="title_activity_about_app">AboutAppActivity</string>
     <string name="about_app_title">About DinnerHalp</string>
     <string name="about_app_class">com.gmail.mlwhal.dinnerhalp.AboutAppActivity</string>
-    <string name="text_about_app">DinnerHalp 1.7 by Marika Whaley \ncopyright 2015–2023</string>
+    <string name="text_about_app">DinnerHalp 1.8 by Marika Whaley \ncopyright 2015–2024</string>
     <string name="image_dinnerhalp_icon">DinnerHalp app icon</string>
 
     <string name="title_activity_settings">Settings</string>

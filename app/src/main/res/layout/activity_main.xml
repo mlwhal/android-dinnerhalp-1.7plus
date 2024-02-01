@@ -4,4 +4,13 @@
     android:id="@+id/pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" />
+    tools:context=".MainActivity">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/tab_layout"
+        android:theme="@style/Theme.DinnerHalp.CustomTabLayout"/>
+
+</androidx.viewpager.widget.ViewPager>

@@ -11,7 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Locale;
+import java.util.Objects;
+//import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -26,12 +27,12 @@ import android.content.res.TypedArray;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -52,10 +53,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.gmail.mlwhal.dinnerhalp.ui.main.SectionsPagerAdapter;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.tabs.TabLayout;
 
 
-public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
+public class MainActivity extends AppCompatActivity {
 
     /**
      * The {@link PagerAdapter} that will provide
@@ -94,50 +97,53 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
                 mFragmentTracker = 0;
-//                Log.d(TAG, "onCreate: Extras are null");
+                Log.d(TAG, "onCreate: Extras are null");
             } else {
                 mFragmentTracker = extras.getInt("FRAGMENT_TRACKER");
-//                Log.d(TAG, "onCreate: Extras not null, mFragmentTracker = " + mFragmentTracker);
+                Log.d(TAG, "onCreate: Extras not null, mFragmentTracker = " + mFragmentTracker);
             }
         } else {
             mFragmentTracker = savedInstanceState.getInt("FRAGMENT_TRACKER");
-//            Log.d(TAG, "onCreate: savedInstanceState, mFragmentTracker = " + mFragmentTracker);
+            Log.d(TAG, "onCreate: savedInstanceState, mFragmentTracker = " + mFragmentTracker);
         }
 
         // Set up the action bar.
-        final ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+//        final ActionBar actionBar = getSupportActionBar();
+//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
         // Create the adapter that will return a fragment for each of the two
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(this,
+                getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        tabLayout.setupWithViewPager(mViewPager);
 
-        // When swiping between different sections, select the corresponding
-        // tab. We can also use ActionBar.Tab#select() to do this if we have
-        // a reference to the Tab.
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                actionBar.setSelectedNavigationItem(position);
-            }
-        });
-
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-            // Create a tab with text corresponding to the page title defined by
-            // the adapter. Also specify this Activity object, which implements
-            // the TabListener interface, as the callback (listener) for when
-            // this tab is selected.
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-                            .setTabListener(this));
-        }
-//        Log.d(TAG, "onCreate: mViewPager set, mFragmentTracker = " + mFragmentTracker);
+//        // When swiping between different sections, select the corresponding
+//        // tab. We can also use ActionBar.Tab#select() to do this if we have
+//        // a reference to the Tab.
+//        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+//            @Override
+//            public void onPageSelected(int position) {
+//                actionBar.setSelectedNavigationItem(position);
+//            }
+//        });
+//
+//        // For each of the sections in the app, add a tab to the action bar.
+//        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+//            // Create a tab with text corresponding to the page title defined by
+//            // the adapter. Also specify this Activity object, which implements
+//            // the TabListener interface, as the callback (listener) for when
+//            // this tab is selected.
+//            actionBar.addTab(
+//                    actionBar.newTab()
+//                            .setText(mSectionsPagerAdapter.getPageTitle(i))
+//                            .setTabListener(this));
+//        }
+        Log.d(TAG, "onCreate: mViewPager set, mFragmentTracker = " + mFragmentTracker);
         //Choose the correct tab based on info from saved state or extra, stored in mFragmentTracker
         mViewPager.setCurrentItem(mFragmentTracker);
 
@@ -186,62 +192,62 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
     }
 
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        // When the given tab is selected, switch to the corresponding page in
-        // the ViewPager.
-        mViewPager.setCurrentItem(tab.getPosition());
-//        Log.d(TAG, "onTabSelected, mFragmentTracker is " + mFragmentTracker);
-    }
+//    @Override
+//    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+//        // When the given tab is selected, switch to the corresponding page in
+//        // the ViewPager.
+//        mViewPager.setCurrentItem(tab.getPosition());
+////        Log.d(TAG, "onTabSelected, mFragmentTracker is " + mFragmentTracker);
+//    }
+//
+//    @Override
+//    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+//    }
+//
+//    @Override
+//    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+//    }
 
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    private class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return either SearchFragment or ManageDBFragment (defined as a static inner class below).
-            if (position == 0) {
-                return SearchFragment.newInstance(position + 1);
-            } else {
-                return ManageDBFragment.newInstance(position + 1);
-            }
-        }
-
-        @Override
-        public int getCount() {
-            // Show 2 total pages.
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
-                case 1:
-                    return getString(R.string.title_section2).toUpperCase(l);
-            }
-            return null;
-        }
-    }
+//    /**
+//     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+//     * one of the sections/tabs/pages.
+//     */
+//    private class SectionsPagerAdapter extends FragmentPagerAdapter {
+//
+//        SectionsPagerAdapter(FragmentManager fm) {
+//            super(fm);
+//        }
+//
+//        @NonNull
+//        @Override
+//        public Fragment getItem(int position) {
+//            // getItem is called to instantiate the fragment for the given page.
+//            // Return either SearchFragment or ManageFragment (defined as a static inner class below).
+//            if (position == 0) {
+//                return SearchFragment.newInstance(position + 1);
+//            } else {
+//                return ManageFragment.newInstance(position + 1);
+//            }
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            // Show 2 total pages.
+//            return 2;
+//        }
+//
+//        @Override
+//        public CharSequence getPageTitle(int position) {
+//            Locale l = Locale.getDefault();
+//            switch (position) {
+//                case 0:
+//                    return getString(R.string.title_section1).toUpperCase(l);
+//                case 1:
+//                    return getString(R.string.title_section2).toUpperCase(l);
+//            }
+//            return null;
+//        }
+//    }
 
     //Add an onSaveInstanceState() method to save currently selected tab
     @Override
@@ -251,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         //Set mFragmentTracker to current tab in order to save info to outstate
         mFragmentTracker = mViewPager.getCurrentItem();
         outstate.putInt("FRAGMENT_TRACKER", mFragmentTracker);
-//        Log.d(TAG, "Save state! mFragmentTracker = " + mFragmentTracker);
+        Log.d(TAG, "Save state! mFragmentTracker = " + mFragmentTracker);
     }
 
     @Override
@@ -259,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         super.onRestoreInstanceState(savedInstanceState);
 
         mFragmentTracker = savedInstanceState.getInt("FRAGMENT_TRACKER");
-//        Log.d(TAG, "Restore state! mFragmentTracker = " + mFragmentTracker);
+        Log.d(TAG, "Restore state! mFragmentTracker = " + mFragmentTracker);
     }
 
     //Method to track which tab to load when navigating from other activities
@@ -268,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         super.onResume();
 
         mViewPager.setCurrentItem(mFragmentTracker);
-//        Log.d(TAG, "onResume; mFragmentTracker is " + mFragmentTracker);
+        Log.d(TAG, "onResume; mFragmentTracker is " + mFragmentTracker);
     }
 
 
@@ -326,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        static SearchFragment newInstance(int sectionNumber) {
+        public static SearchFragment newInstance(int sectionNumber) {
             SearchFragment fragment = new SearchFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -560,7 +566,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     /**
      * A fragment containing the manage DB screen view.
      */
-    public static class ManageDBFragment extends Fragment {
+    public static class ManageFragment extends Fragment {
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -570,7 +576,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         static class ManageOnItemClickListener implements AdapterView.OnItemClickListener {
 
             ManageOnItemClickListener(MainActivity activity,
-                                      ManageDBFragment frag) {
+                                      ManageFragment frag) {
                 theActivity = activity;
                 theFragment = frag;
             }
@@ -613,7 +619,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             }
 
             private MainActivity theActivity;
-            private ManageDBFragment theFragment;
+            private ManageFragment theFragment;
 
         }
 
@@ -621,15 +627,15 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        static ManageDBFragment newInstance(int sectionNumber) {
-            ManageDBFragment fragment = new ManageDBFragment();
+        public static ManageFragment newInstance(int sectionNumber) {
+            ManageFragment fragment = new ManageFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
             return fragment;
         }
 
-        public ManageDBFragment() {
+        public ManageFragment() {
         }
 
         @Override
@@ -1027,7 +1033,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 getResources().getString(R.string.pref_theme_default));
         switch (mDarkModePref) {
             case "MODE_NIGHT_FOLLOW_SYSTEM":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);;
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                 break;
             case "MODE_NIGHT_NO":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);

@@ -30,7 +30,7 @@ public class SettingsActivity extends AppCompatActivity {
                 String darkModePref = sharedPreferences.getString(key, "MODE_NIGHT_FOLLOW_SYSTEM");
                 switch (darkModePref) {
                     case "MODE_NIGHT_FOLLOW_SYSTEM":
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);;
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                         break;
                     case "MODE_NIGHT_NO":
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);

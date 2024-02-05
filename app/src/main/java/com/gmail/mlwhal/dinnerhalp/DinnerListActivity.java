@@ -1,6 +1,5 @@
 package com.gmail.mlwhal.dinnerhalp;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 //import android.app.DialogFragment;
 import androidx.appcompat.app.AppCompatDialogFragment;
@@ -30,7 +29,7 @@ import android.widget.Toast;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
-import java.util.Objects;
+//import java.util.Objects;
 
 
 public class DinnerListActivity extends AppCompatActivity {
@@ -154,7 +153,7 @@ public class DinnerListActivity extends AppCompatActivity {
         mDbHelper.open();
         Cursor dinnerCursor;
         //Boolean to track whether the DinnerListActivity came from a search or from "show all"
-        final Boolean queryDinnerList;
+        final boolean queryDinnerList;
 
         //An if statement to distinguish between retrieving all records
         //and retrieving just the results of a search (column name, search term)
@@ -205,13 +204,10 @@ public class DinnerListActivity extends AppCompatActivity {
             }
         });
 
-        addDinnerTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(addDinnerTextView.getContext(), AddDinnerActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        addDinnerTextView.setOnClickListener(v -> {
+            Intent intent = new Intent(addDinnerTextView.getContext(), AddDinnerActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         //Show the help button only when there are dinners in the listview
@@ -427,12 +423,12 @@ public class DinnerListActivity extends AppCompatActivity {
         //Create chooser and give it the shareIntent, if there's an app to handle it
         Intent chooser = Intent.createChooser(shareIntent,
                 getResources().getText(R.string.intent_share_dialog_title));
-        if (shareIntent.resolveActivity(getPackageManager()) != null) {
+//        if (shareIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(chooser);
-        } else {
-            Toast.makeText(getApplicationContext(), "Please download an app before trying to share",
-                    Toast.LENGTH_SHORT).show();
-        }
+//        } else {
+//            Toast.makeText(getApplicationContext(), "Please download an app before trying to share",
+//                    Toast.LENGTH_SHORT).show();
+//        }
 
     }
 
@@ -488,26 +484,20 @@ public class DinnerListActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Dialog onCreateDialog (Bundle savedInstanceState) {
+            assert getArguments() != null;
             int title = getArguments().getInt("title");
 
             return new MaterialAlertDialogBuilder(getActivity(), R.style.Theme_DinnerHalp_CustomAlertDialog)
                     .setTitle(title)
                     .setPositiveButton(R.string.alert_dialog_delete_ok,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int whichButton) {
+                            (dialog, whichButton) -> {
 //                                    Log.d(TAG, "Delete button clicked!");
-                                    ((DinnerListActivity) requireActivity()).doPositiveClick();
-                                }
+                                ((DinnerListActivity) requireActivity()).doPositiveClick();
                             }
                     )
                     .setNegativeButton(R.string.button_cancel,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    ((DinnerListActivity) requireActivity()).doNegativeClick();
-                                }
-                            }
+                            (dialog, whichButton) ->
+                                    ((DinnerListActivity) requireActivity()).doNegativeClick()
                     )
                     .create();
         }

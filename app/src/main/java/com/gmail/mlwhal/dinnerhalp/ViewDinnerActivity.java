@@ -2,22 +2,19 @@ package com.gmail.mlwhal.dinnerhalp;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-//import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-//import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialogFragment;
-import androidx.core.view.MenuItemCompat;
-import androidx.appcompat.widget.ShareActionProvider;
+//import androidx.appcompat.widget.ShareActionProvider;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -322,12 +319,12 @@ public class ViewDinnerActivity extends AppCompatActivity {
         //Launch a chooser activity
         Intent sendIntent = Intent.createChooser(shareIntent, null);
         Log.d(TAG, "shareDinner: Chooser being created");
-        if (shareIntent.resolveActivity(getPackageManager()) != null) {
+//        if (shareIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(sendIntent);
-        } else {
-            Toast.makeText(getApplicationContext(), "Please download an app before trying to share",
-                    Toast.LENGTH_SHORT).show();
-        }
+//        } else {
+//            Toast.makeText(getApplicationContext(), "Please download an app before trying to share",
+//                    Toast.LENGTH_SHORT).show();
+//        }
 
     }
 
@@ -344,6 +341,7 @@ public class ViewDinnerActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Dialog onCreateDialog (Bundle savedInstanceState) {
+            assert getArguments() != null;
             int title = getArguments().getInt("title");
 
             return new AlertDialog.Builder(getActivity())

@@ -1,8 +1,6 @@
 package com.gmail.mlwhal.dinnerhalp;
 
-//import android.app.AlertDialog;
 import android.app.Dialog;
-//import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,7 +33,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.util.Objects;
+//import java.util.Objects;
 
 public class AddDinnerActivity extends AppCompatActivity {
 
@@ -273,52 +271,50 @@ public class AddDinnerActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
         //This code handles when the user chooses an image to save as part of a dinner
-        switch(requestCode) {
-            case PICK_IMAGE_REQUEST:
-                if (resultCode == RESULT_OK) {
-                    mSelectedImageUri = imageReturnedIntent.getData();
+        if (requestCode == PICK_IMAGE_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                mSelectedImageUri = imageReturnedIntent.getData();
 //                    Log.d(TAG, "Uri is " + mSelectedImageUri);
 
-                    //Take a persistent permission for the image file so the app doesn't lose it later
-                    int takeFlags = imageReturnedIntent.getFlags();
-                    takeFlags &= (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                    //Check for the freshest data
-                    getContentResolver().takePersistableUriPermission(mSelectedImageUri, takeFlags);
+                //Take a persistent permission for the image file so the app doesn't lose it later
+                int takeFlags = imageReturnedIntent.getFlags();
+                takeFlags &= (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                //Check for the freshest data
+                getContentResolver().takePersistableUriPermission(mSelectedImageUri, takeFlags);
 
-                    //Scale the image to the preferred size for the device
-                    //First, get the max preferred size for image from arrays.xml
-                    //This will be saved in the database in case the user ever wants the largest size
-                    String[] imageScalePrefArray = getResources().getStringArray(R.array.pref_image_size_values);
-                    int imageScaleMax = Integer.parseInt(imageScalePrefArray[imageScalePrefArray.length - 1]);
+                //Scale the image to the preferred size for the device
+                //First, get the max preferred size for image from arrays.xml
+                //This will be saved in the database in case the user ever wants the largest size
+                String[] imageScalePrefArray = getResources().getStringArray(R.array.pref_image_size_values);
+                int imageScaleMax = Integer.parseInt(imageScalePrefArray[imageScalePrefArray.length - 1]);
 //                    Log.d(TAG, "imageScaleMax is " + imageScalePrefArray[imageScalePrefArray.length - 1]);
-                    long maxSizePref = ImageHandler.getImageWidthPref(getApplicationContext(),
-                            imageScaleMax);
-                    //Then get the user's preferred size for image
-                    long imageSizePref = ImageHandler.getImageWidthPref(getApplicationContext(),
-                            mImageScalePref);
+                long maxSizePref = ImageHandler.getImageWidthPref(getApplicationContext(),
+                        imageScaleMax);
+                //Then get the user's preferred size for image
+                long imageSizePref = ImageHandler.getImageWidthPref(getApplicationContext(),
+                        mImageScalePref);
 //                    Log.d(TAG, "Max size is " + maxSizePref + ", pref size is " + imageSizePref);
-                    try {
-                        //Store a bitmap at the largest allowed scale to save in the db
-                        mDinnerBitmap = ImageHandler.resizeImage(getApplicationContext(),
-                                mSelectedImageUri, maxSizePref);
-                        mDinnerBitmap = ImageHandler.rotateImage(getApplicationContext(),
-                                mSelectedImageUri, mDinnerBitmap);
+                try {
+                    //Store a bitmap at the largest allowed scale to save in the db
+                    mDinnerBitmap = ImageHandler.resizeImage(getApplicationContext(),
+                            mSelectedImageUri, maxSizePref);
+                    mDinnerBitmap = ImageHandler.rotateImage(getApplicationContext(),
+                            mSelectedImageUri, mDinnerBitmap);
 //                        Log.d(TAG, "mDinnerBitmap set to large size");
-                        //Create bitmap matching current size preference for display
-                        Bitmap dinnerBitmap = ImageHandler.resizeImage(getApplicationContext(),
-                                mSelectedImageUri, imageSizePref);
-                        dinnerBitmap = ImageHandler.rotateImage(getApplicationContext(),
-                                mSelectedImageUri, dinnerBitmap);
+                    //Create bitmap matching current size preference for display
+                    Bitmap dinnerBitmap = ImageHandler.resizeImage(getApplicationContext(),
+                            mSelectedImageUri, imageSizePref);
+                    dinnerBitmap = ImageHandler.rotateImage(getApplicationContext(),
+                            mSelectedImageUri, dinnerBitmap);
 //                        Log.d(TAG, "Bitmap for viewing has been processed");
-                        //Show the image in the ImageView so the user knows the image selection worked
-                        mSetPicButton.setImageBitmap(dinnerBitmap);
-                    } catch (FileNotFoundException e) {
-                        Log.d(TAG, Log.getStackTraceString(e));
-                        Toast.makeText(getApplicationContext(), R.string.toast_exception,
-                                Toast.LENGTH_LONG).show();
-                    }
+                    //Show the image in the ImageView so the user knows the image selection worked
+                    mSetPicButton.setImageBitmap(dinnerBitmap);
+                } catch (FileNotFoundException e) {
+                    Log.d(TAG, Log.getStackTraceString(e));
+                    Toast.makeText(getApplicationContext(), R.string.toast_exception,
+                            Toast.LENGTH_LONG).show();
                 }
-
+            }
         }
     }
 
@@ -518,7 +514,7 @@ public class AddDinnerActivity extends AppCompatActivity {
                         mRowId, name, method, time, servings, picpath, imageByteArray, recipe);
                 mDbHelper.close();
             } catch (SQLiteConstraintException e) {
-                Log.d(TAG, "Exception caught: " + e.toString());
+                Log.d(TAG, "Exception caught: " + e);
                 notUniqueName();
             }
             if (updateSuccess) {
@@ -644,6 +640,7 @@ public class AddDinnerActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Dialog onCreateDialog (Bundle savedInstanceState) {
+            assert getArguments() != null;
             int title = getArguments().getInt("title");
 
             return new MaterialAlertDialogBuilder(getActivity(), R.style.Theme_DinnerHalp_NightAlertDialog)
@@ -703,6 +700,7 @@ public class AddDinnerActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            assert getArguments() != null;
             int title = getArguments().getInt("title");
             int message = getArguments().getInt("message");
 

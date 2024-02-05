@@ -12,11 +12,11 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Objects;
+//import java.util.Objects;
 //import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-//import android.app.DialogFragment;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,14 +27,14 @@ import android.content.res.TypedArray;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
+//import androidx.annotation.Nullable;
+//import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
+//import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.FragmentPagerAdapter;
 import android.os.Bundle;
 
@@ -385,9 +385,10 @@ public class MainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            assert getArguments() != null;
             int title = getArguments().getInt("title");
 
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(),
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity(),
                     R.style.Theme_DinnerHalp_CustomAlertDialog);
             //Get the layout inflater
             LayoutInflater inflater = requireActivity().getLayoutInflater();
@@ -423,11 +424,7 @@ public class MainActivity extends AppCompatActivity {
 
                             })
                     .setNegativeButton(R.string.button_cancel,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    KeywordDialogFragment.this.getDialog().cancel();
-                                }
-                            });
+                            (dialog, id) -> KeywordDialogFragment.this.getDialog().cancel());
             return builder.create();
         }
     }
@@ -451,6 +448,7 @@ public class MainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            assert getArguments() != null;
             int title = getArguments().getInt("title");
             //Create a string array to hold method values; these will be the db query terms.
             final String[] methods = getResources().getStringArray(R.array.method_array);
@@ -491,6 +489,7 @@ public class MainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            assert getArguments() != null;
             int title = getArguments().getInt("title");
             //Create a string array to hold time values; these will be the db query terms.
             final String[] times = getResources().getStringArray(R.array.time_array);
@@ -533,6 +532,7 @@ public class MainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            assert getArguments() != null;
             int title = getArguments().getInt("title");
             //Create a string array to hold serving values; these will be the db query terms.
             final String[] servings = getResources().getStringArray(R.array.servings_array);
@@ -684,25 +684,17 @@ public class MainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            assert getArguments() != null;
             int title = getArguments().getInt("title");
 
             return new MaterialAlertDialogBuilder(getActivity(), R.style.Theme_DinnerHalp_CustomAlertDialog)
                     .setMessage(title)
                     .setPositiveButton(R.string.alert_dialog_delete_ok,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    ((MainActivity) requireActivity()).delAllDinners();
-                                }
-                            }
+                            (dialog, whichButton) -> ((MainActivity) requireActivity()).delAllDinners()
                     )
                     .setNegativeButton(R.string.button_cancel,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    ((MainActivity) requireActivity()).doNegativeClick(0);
-                                }
-                            }
+                            (dialog, whichButton) -> ((MainActivity) requireActivity())
+                                    .doNegativeClick(0)
                     )
                     .create();
         }
@@ -765,26 +757,18 @@ public class MainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            assert getArguments() != null;
             int title = getArguments().getInt("title");
 
             return new MaterialAlertDialogBuilder(getActivity(), R.style.Theme_DinnerHalp_CustomAlertDialog)
                     .setMessage(title)
                     .setPositiveButton(R.string.import_positive_button,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    ((MainActivity) requireActivity())
-                                            .importDBFileChooser();
-                                }
-                            }
+                            (dialog, whichButton) -> ((MainActivity) requireActivity())
+                                    .importDBFileChooser()
                     )
                     .setNegativeButton(R.string.button_cancel,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    ((MainActivity) requireActivity()).doNegativeClick(1);
-                                }
-                            }
+                            (dialog, whichButton) -> ((MainActivity) requireActivity())
+                                    .doNegativeClick(1)
                     ).create();
         }
 

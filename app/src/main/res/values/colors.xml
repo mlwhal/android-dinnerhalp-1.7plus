@@ -9,7 +9,9 @@
     <color name="colorHintText">#7f0000</color>
     <color name="colorUnselectedText">#DDDDDD</color>
     <color name="colorKnockout">#FFFFFF</color>
-    <color name="colorLongPressSelected">#F74A4A</color>
+    <color name="colorLongPressSelected">#E6E6E6</color>
+<!--    Alternative long press highlight color-->
+    <!--color name="colorLongPressSelected">#F2CBCB</color-->
     <color name="colorTextButton">@color/colorPrimaryDark</color>
 
 

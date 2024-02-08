@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId "com.gmail.mlwhal.dinnerhalp"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 8
         versionName "1.8"
 

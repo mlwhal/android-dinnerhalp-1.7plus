@@ -107,10 +107,8 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "onCreate: savedInstanceState, mFragmentTracker = " + mFragmentTracker);
         }
 
-        // Set up the action bar.
-//        final ActionBar actionBar = getSupportActionBar();
-//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        // Set up the tab layout.
+       TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
         // Create the adapter that will return a fragment for each of the two
         // primary sections of the activity.
@@ -122,27 +120,6 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         tabLayout.setupWithViewPager(mViewPager);
 
-//        // When swiping between different sections, select the corresponding
-//        // tab. We can also use ActionBar.Tab#select() to do this if we have
-//        // a reference to the Tab.
-//        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-//            @Override
-//            public void onPageSelected(int position) {
-//                actionBar.setSelectedNavigationItem(position);
-//            }
-//        });
-//
-//        // For each of the sections in the app, add a tab to the action bar.
-//        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-//            // Create a tab with text corresponding to the page title defined by
-//            // the adapter. Also specify this Activity object, which implements
-//            // the TabListener interface, as the callback (listener) for when
-//            // this tab is selected.
-//            actionBar.addTab(
-//                    actionBar.newTab()
-//                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-//                            .setTabListener(this));
-//        }
         Log.d(TAG, "onCreate: mViewPager set, mFragmentTracker = " + mFragmentTracker);
         //Choose the correct tab based on info from saved state or extra, stored in mFragmentTracker
         mViewPager.setCurrentItem(mFragmentTracker);
@@ -191,63 +168,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-//    @Override
-//    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-//        // When the given tab is selected, switch to the corresponding page in
-//        // the ViewPager.
-//        mViewPager.setCurrentItem(tab.getPosition());
-////        Log.d(TAG, "onTabSelected, mFragmentTracker is " + mFragmentTracker);
-//    }
-//
-//    @Override
-//    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-//    }
-//
-//    @Override
-//    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-//    }
-
-//    /**
-//     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-//     * one of the sections/tabs/pages.
-//     */
-//    private class SectionsPagerAdapter extends FragmentPagerAdapter {
-//
-//        SectionsPagerAdapter(FragmentManager fm) {
-//            super(fm);
-//        }
-//
-//        @NonNull
-//        @Override
-//        public Fragment getItem(int position) {
-//            // getItem is called to instantiate the fragment for the given page.
-//            // Return either SearchFragment or ManageFragment (defined as a static inner class below).
-//            if (position == 0) {
-//                return SearchFragment.newInstance(position + 1);
-//            } else {
-//                return ManageFragment.newInstance(position + 1);
-//            }
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            // Show 2 total pages.
-//            return 2;
-//        }
-//
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            Locale l = Locale.getDefault();
-//            switch (position) {
-//                case 0:
-//                    return getString(R.string.title_section1).toUpperCase(l);
-//                case 1:
-//                    return getString(R.string.title_section2).toUpperCase(l);
-//            }
-//            return null;
-//        }
-//    }
 
     //Add an onSaveInstanceState() method to save currently selected tab
     @Override

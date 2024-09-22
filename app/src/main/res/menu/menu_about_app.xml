@@ -4,7 +4,7 @@
     tools:context="com.gmail.mlwhal.dinnerhalp.AboutAppActivity">
 
     <item android:id="@+id/action_add_dinner"
-        android:icon="@drawable/ic_action_new"
+        android:icon="@drawable/ic_action_add"
         android:title="@string/action_add_dinner"
         app:showAsAction="always"/>
 
@@ -19,8 +19,9 @@
         app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_settings"
+        android:icon="@drawable/ic_action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 
 </menu>

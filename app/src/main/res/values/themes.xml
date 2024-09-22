@@ -8,6 +8,7 @@
         <item name="colorOnPrimary">@color/colorKnockout</item>
         <item name="colorOnSecondary">@color/colorKnockout</item>
         <item name="actionBarTheme">@style/ThemeOverlay.DinnerHalp.ActionBar</item>
+        <item name="android:actionMenuTextColor">@color/colorActionIcon</item>
 
         <item name="android:alertDialogTheme">@style/Theme.DinnerHalp.CustomAlertDialog</item>
     </style>

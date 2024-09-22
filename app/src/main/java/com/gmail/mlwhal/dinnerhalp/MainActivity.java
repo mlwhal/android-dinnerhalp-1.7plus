@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Objects;
 //import java.util.Objects;
 //import java.util.Locale;
 
@@ -55,6 +54,7 @@ import android.widget.Toast;
 
 import com.gmail.mlwhal.dinnerhalp.ui.main.SectionsPagerAdapter;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 
@@ -123,6 +123,41 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: mViewPager set, mFragmentTracker = " + mFragmentTracker);
         //Choose the correct tab based on info from saved state or extra, stored in mFragmentTracker
         mViewPager.setCurrentItem(mFragmentTracker);
+
+        //Set up the floating action button click listener
+        ExtendedFloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onCreate: FAB has been clicked");
+                Intent intent = new Intent(MainActivity.this, AddDinnerActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //Show FAB only on the SearchFragment (case 0)
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset,
+                                       int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        fab.show();
+                        break;
+                    case 1:
+                        fab.hide();
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
 
         //Initialize PreferenceManager with default values (recommended by
         //https://developer.android.com/guide/topics/ui/settings.html)

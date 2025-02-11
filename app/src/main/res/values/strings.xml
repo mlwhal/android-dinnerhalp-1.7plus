@@ -214,7 +214,7 @@
     <string name="title_activity_about_app">AboutAppActivity</string>
     <string name="about_app_title">About DinnerHalp</string>
     <string name="about_app_class">com.gmail.mlwhal.dinnerhalp.AboutAppActivity</string>
-    <string name="text_about_app">DinnerHalp 1.9 by Marika Whaley \ncopyright 2015–2024</string>
+    <string name="text_about_app">DinnerHalp 1.9 by Marika Whaley \ncopyright 2015–2025</string>
     <string name="image_dinnerhalp_icon">DinnerHalp app icon</string>
 
     <string name="title_activity_settings">Settings</string>

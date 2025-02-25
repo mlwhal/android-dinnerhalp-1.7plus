@@ -9,12 +9,13 @@
     </array>
 
     <array name="manage_dinner_icon_array">
-        <item>@drawable/ic_add_dinner050</item>
+        <!--item>@drawable/ic_add_dinner050</item-->
         <item>@drawable/ic_explore_list050</item>
         <item>@drawable/ic_delete050</item>
         <item>@drawable/ic_copy050</item>
-        <item>@drawable/ic_import050</item>
+        <item>@drawable/ic_restore050</item>
         <item>@drawable/ic_share050</item>
+        <item>@drawable/ic_import050</item>
     </array>
 
     <string-array name="pref_image_size_array">

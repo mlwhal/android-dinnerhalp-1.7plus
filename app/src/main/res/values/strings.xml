@@ -32,12 +32,13 @@
     <!--Manage DB fragment  -->
     <string name="manage_dinners_title">Manage dinners</string>
     <string-array name="manage_dinners_array">
-        <item>Add</item>
+        <!--item>Add</item-->
         <item>View/edit/delete</item>
         <item>Delete all</item>
         <item>Backup database file</item>
-        <item>Restore/import database file</item>
+        <item>Restore database file</item>
         <item>Share database file</item>
+        <item>Import database file</item>
     </string-array>
 
     <!--Delete database alert dialog  -->
@@ -51,6 +52,19 @@
     how many old backups to keep</string>
     <string name="backup_db_files_deleted">Old backups were deleted; go to Settings to change how
     many old backups to keep</string>
+
+    <!-- Restore database alert dialog -->
+    <string name="restore_alert_title">Restore an older database file? You will lose any changes
+        you made since that backup.</string>
+    <string name="restore_positive_button">Restore most recent file</string>
+    <string name="restore_neutral_button">Choose file to restore</string>
+    <string name="restore_success_alert">Backup has been restored</string>
+    <string name="restore_cancel_alert">Action was canceled</string>
+    <string name="restore_nobackup_alert">There are no backup files to restore from</string>
+
+    <!--Choose backup alert dialog -->
+    <string name="choose_backup_alert_title">Choose a backup to restore. Just remember this overwrites your
+        current list of dinners!</string>
 
     <!--Import database alert dialog  -->
     <string name="import_alert_title">Import a different database file? This will overwrite your

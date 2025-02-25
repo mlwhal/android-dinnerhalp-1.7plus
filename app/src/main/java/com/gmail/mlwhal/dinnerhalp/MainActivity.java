@@ -129,13 +129,14 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onCreate: FAB has been clicked");
+//                Log.d(TAG, "onCreate: FAB has been clicked");
                 Intent intent = new Intent(MainActivity.this, AddDinnerActivity.class);
                 startActivity(intent);
             }
         });
 
         //Show FAB only on the SearchFragment (case 0)
+        //Todo: Forget this, show FAB on both fragments
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset,
@@ -144,14 +145,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                switch (position) {
-                    case 0:
-                        fab.show();
-                        break;
-                    case 1:
-                        fab.hide();
-                        break;
-                }
+//                switch (position) {
+//                    case 0:
+//                        fab.show();
+//                        break;
+//                    case 1:
+//                        fab.hide();
+//                        break;
+//                }
             }
 
             @Override
@@ -541,33 +542,41 @@ public class MainActivity extends AppCompatActivity {
 //                Log.d(TAG, "Position clicked " + position);
 
                 switch (position) {
-                    //Add dinner
-                    case 0:
-                        Intent intent1 = new Intent(theActivity, AddDinnerActivity.class);
-                        //Let next activity know we came from ManageFragment
-                        //intent1.putExtra("FRAGMENT_TRACKER", 1);
-                        theFragment.startActivity(intent1);
-                        break;
                     //Get dinner list in order to edit or delete
-                    case 1:
+                    case 0:
                         Intent intent2 = new Intent(theActivity, DinnerListActivity.class);
                         theFragment.startActivity(intent2);
                         break;
                     //Delete all records in database
-                    case 2:
+                    case 1:
                         theActivity.showDeleteDBDialog();
                         break;
                     //Copy database file to storage
-                    case 3:
+                    case 2:
                         theActivity.copyDBtoStorage(theActivity, false);
                         break;
-                    //Launch import alert dialog
-                    case 4:
-                        theActivity.showImportDBDialog();
+                    //Restore database file from storage
+                    case 3:
+                        //Check whether there are backup files before launching dialog
+                        if (theActivity.checkFilesDir() != null) {
+                            Log.d(TAG, "checkFilesDir fired; checkFilesDir.length = " +
+                                    theActivity.checkFilesDir().length);
+                            theActivity.showRestoreDBDialog();
+                        } else {
+                            Log.d(TAG, "checkFilesDir() fired; checkFilesDir is null");
+                            Toast.makeText(theActivity.getApplicationContext(),
+                                    R.string.restore_nobackup_alert, Toast.LENGTH_LONG)
+                                    .show();
+                            break;
+                        }
                         break;
                     //Share/email item
-                    case 5:
+                    case 4:
                         theActivity.shareDB(theActivity);
+                        break;
+                    //Launch import alert dialog
+                    case 5:
+                        theActivity.showImportDBDialog();
                         break;
                 }
 
@@ -685,7 +694,7 @@ public class MainActivity extends AppCompatActivity {
     public void doNegativeClick(int position) {
         //Go back to manage fragment
 //        Log.d(TAG, "Cancel button clicked");
-        //Two alert dialogs use cancel: 0-delete database; 1-import database file
+        //Three alert dialogs use cancel: 0-delete database; 1-import database file, 2-restore db file
         switch (position) {
             case 0:
                 Toast.makeText(getApplicationContext(),
@@ -696,10 +705,227 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),
                         getResources().getString(R.string.import_cancel_alert),
                         Toast.LENGTH_LONG).show();
+                break;
+            case 2:
+                Toast.makeText(getApplicationContext(),
+                        R.string.restore_cancel_alert,
+                        Toast.LENGTH_LONG).show();
         }
     }
 
-    //Custom class for restore/import dialog fragment
+    //Method to retrieve any backup files in app storage; will return null if no
+    public File[] checkFilesDir() {
+        Context context = getApplicationContext();
+//        File file = new File(context.getFilesDir() + "/");
+        File file = new File(context.getExternalFilesDir(null), "/");
+        return file.listFiles();
+    }
+
+    //Custom class for restore db dialog fragment
+    public static class RestoreDBDialogFragment extends AppCompatDialogFragment {
+        static RestoreDBDialogFragment newInstance (int title) {
+            RestoreDBDialogFragment frag = new RestoreDBDialogFragment();
+            Bundle args = new Bundle();
+            args.putInt("title", title);
+            frag.setArguments(args);
+            return frag;
+        }
+
+        @NonNull
+        @Override
+        public  Dialog onCreateDialog(Bundle savedInstanceState) {
+            assert getArguments() != null;
+            int title = getArguments().getInt("title");
+
+            //Todo: checkFilesDir and provide different dialog for different cases: 2-button if 1 file,
+            //3-button if more than 1 file
+            return new MaterialAlertDialogBuilder(getActivity(), R.style.Theme_DinnerHalp_CustomAlertDialog)
+                    .setTitle(title)
+                    .setPositiveButton(R.string.restore_positive_button,
+                            (dialog, whichButton) -> ((MainActivity) requireActivity())
+                    .restoreLastBackup()
+                    )
+                    .setNeutralButton(R.string.restore_neutral_button,
+                            (dialog, whichButton) -> ((MainActivity) requireActivity())
+                    .chooseBackupFile()
+                    )
+                    .setNegativeButton(R.string.button_cancel,
+                            (dialog, whichButton) -> ((MainActivity) requireActivity())
+                                    .doNegativeClick(2)
+                    ).create();
+        }
+    }
+
+    public void showRestoreDBDialog() {
+        //Todo: Pass in String[] as arg to use for file list
+        AppCompatDialogFragment newFragment = RestoreDBDialogFragment.newInstance(
+                R.string.restore_alert_title);
+        newFragment.show(getSupportFragmentManager(), "dialog");
+
+    }
+
+    //Method to restore most recent backup file
+    public void restoreLastBackup() {
+        File[] files = checkFilesDir();
+        Log.d(TAG, "restoreBackupDB fired, checkFilesDir.length = " + checkFilesDir().length);
+        //Double check that file list is not empty; this should never fire but who knows?
+        if (files == null) {
+            Toast.makeText(getApplicationContext(), R.string.restore_nobackup_alert,
+                    Toast.LENGTH_LONG).show();
+            //Todo: somehow kill the dialog? Test this use case
+        } else {
+            //Get last backup file; the latest is always at the end of the array
+            Log.d(TAG, "restoreBackupDB: files in file array are: " +
+                    Arrays.toString(checkFilesDir()));
+            Uri fileUri = null;   //Needs to be outside try block
+            try {
+                //Todo: Create custom FileProvider as recommended here:
+                //https://developer.android.com/reference/androidx/core/content/FileProvider
+                fileUri = FileProvider.getUriForFile(MainActivity.this,
+                        "com.gmail.mlwhal.dinnerhalp.fileprovider", files[files.length-1]);
+                Log.d(TAG, "restoreBackupDB: fileUri is " + fileUri);
+            } catch (IllegalArgumentException e) {
+                Toast.makeText(getApplicationContext(), R.string.restore_cancel_alert,Toast.LENGTH_LONG)
+                        .show();
+                e.printStackTrace();
+            }
+            if (fileUri != null) {
+                boolean restoreFile = true;
+                Log.d (TAG, "restoreBackupDB: Launching overwriteDB, restoreFile = " + restoreFile);
+                overwriteDB(fileUri, restoreFile);
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.restore_cancel_alert,
+                        Toast.LENGTH_LONG).show();
+            }
+//                try {
+//                    InputStream restoreDBStream = getContentResolver().openInputStream(fileUri);
+//                    File currentDB = getApplicationContext()
+//                            .getDatabasePath(getString(R.string.filename_full_sharedb));
+//                    OutputStream os = new FileOutputStream(currentDB);
+//                    byte[] buffer = new byte[1024];
+//                    int bytesRead;
+//                    if (restoreDBStream != null) {
+//                        while ((bytesRead = restoreDBStream.read(buffer)) != -1) {
+//                            os.write(buffer, 0, bytesRead);
+//                        }
+//                        restoreDBStream.close();
+//                    }
+//                    os.flush();
+//                    os.close();
+//                    Toast.makeText(getApplicationContext(), R.string.restore_success_alert,
+//                            Toast.LENGTH_LONG).show();
+//                } catch (IOException e) {
+//                    Toast.makeText(getApplicationContext(), R.string.restore_cancel_alert,
+//                            Toast.LENGTH_LONG).show();
+//
+//                }
+//
+//            } else {
+//                Toast.makeText(getApplicationContext(), R.string.restore_cancel_alert,
+//                        Toast.LENGTH_LONG).show();
+//            }
+        }
+    }
+
+    public void chooseBackupFile() {
+        Log.d(TAG, "chooseBackupFile fired");
+        File[] files = checkFilesDir();
+        String[] backupFileNames = new String[files.length];
+        for (int j = 0; j < files.length; j++) {
+            String backupFilePath = String.valueOf(files[j]);
+            String backupFileName = backupFilePath.substring(67);
+            backupFileNames[j] = backupFileName;
+        }
+        Log.d(TAG, "getBackupList: backupFileNames are " + Arrays.toString(backupFileNames));
+        MaterialAlertDialogBuilder chooseFileDialogBuilder = new MaterialAlertDialogBuilder(MainActivity.this,
+                R.style.Theme_DinnerHalp_CustomAlertDialog);
+        chooseFileDialogBuilder.setTitle(R.string.choose_backup_alert_title);
+        chooseFileDialogBuilder.setItems(backupFileNames, new DialogInterface.OnClickListener() {
+            @Override
+                    public void onClick(DialogInterface dialog, int pos) {
+                Uri fileUri = Uri.fromFile(files[pos]);
+                Log.d(TAG, "chooseBackupFile: selected fileUri is " + fileUri);
+                boolean restoredFile = true;
+                overwriteDB(fileUri, restoredFile);
+            }
+        });
+        chooseFileDialogBuilder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+        androidx.appcompat.app.AlertDialog dialog = chooseFileDialogBuilder.create();
+        dialog.show();
+    }
+
+    //Method to overwrite existing DB with restored backup or imported file;
+    //the boolean controls toast messaging
+    public void overwriteDB(Uri fileUri, boolean restoredFile) {
+        if (fileUri != null) {
+            try {
+                InputStream inputDBStream = getContentResolver().openInputStream(fileUri);
+                File currentDB = getApplicationContext()
+                        .getDatabasePath(getString(R.string.filename_full_sharedb));
+                OutputStream outputDBStream = new FileOutputStream(currentDB);
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                if (inputDBStream != null) {
+                    while ((bytesRead = inputDBStream.read(buffer)) != -1) {
+                        outputDBStream.write(buffer, 0, bytesRead);
+                    }
+                    inputDBStream.close();
+                }
+                outputDBStream.flush();
+                outputDBStream.close();
+                if (restoredFile) {
+                    Toast.makeText(getApplicationContext(), R.string.restore_success_alert,
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.import_success_alert,
+                            Toast.LENGTH_LONG).show();
+                }
+            } catch (IOException e) {
+                if (restoredFile) {
+                    Toast.makeText(getApplicationContext(), R.string.restore_cancel_alert,
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.import_cancel_alert,
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        } else {
+            if (restoredFile) {
+                Toast.makeText(getApplicationContext(), R.string.restore_cancel_alert,
+                        Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.import_cancel_alert,
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+//    //Custom class for dialog fragment to choose which backup to restore
+//    public static class ChooseBackupDialogFragment extends AppCompatDialogFragment {
+//        static ChooseBackupDialogFragment newInstance(int title) {
+//            ChooseBackupDialogFragment frag = new ChooseBackupDialogFragment();
+//            Bundle args = new Bundle();
+//            args.putInt("title", title);
+//            frag.setArguments(args);
+//            return frag;
+//        }
+//
+//        @NonNull
+//        @Override
+//        public Dialog onCreateDialog(Bundle savedInstanceState) {
+//            assert getArguments() != null;
+//            int title = getArguments().getInt("title");
+//            //Create a string array to list backup file names
+//            File[] files = checkFilesDir();
+//        }
+//    }
+
+    //Custom class for import dialog fragment
     public static class ImportDBDialogFragment extends AppCompatDialogFragment {
         static ImportDBDialogFragment newInstance(int title) {
             ImportDBDialogFragment frag = new ImportDBDialogFragment();
@@ -745,7 +971,7 @@ public class MainActivity extends AppCompatActivity {
             File storageDir;
             //Choose cache_dir if shareStatus == true; file can be temporary
             if (shareStatus) {
-                storageDir = getApplicationContext().getCacheDir();
+                storageDir = getApplicationContext().getExternalCacheDir();
             } else {
                 storageDir = getApplicationContext().getExternalFilesDir(null);
             }
@@ -803,9 +1029,6 @@ public class MainActivity extends AppCompatActivity {
                     File[] files = storageDir.listFiles();
                     int lngth = files.length;
 //                    Log.d(TAG, "copyDBtoStorage: Number of files is " + lngth);
-//                    for (int i = 0; i < lngth; i++) {
-//                        Log.d(TAG, "Presorted: URL is " + files[i].toString());
-//                    }
                     //Sort the backup files by name
                     Arrays.sort(files, new Comparator<File>() {
                         @Override
@@ -813,9 +1036,6 @@ public class MainActivity extends AppCompatActivity {
                             return file1.getName().compareTo(file2.getName());
                         }
                     });
-//                    for (int i = 0; i < lngth; i++) {
-//                        Log.d(TAG, "Postsorted: URL is " + files[i].toString());
-//                    }
                     //Calculate how many files beyond the preferred number there are (if any)
                     int extraFiles = lngth - mBackupNum;
                     boolean filesDeleted;
@@ -868,33 +1088,37 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == PICK_IMPORT_FILE_REQUEST) {
             //Check for positive result from activity
             if (resultCode == RESULT_OK) {
-                Uri uri = data.getData();
-                try {
-                    InputStream importDBStream = getContentResolver().openInputStream(uri);
-                    File currentDB = getApplicationContext()
-                            .getDatabasePath(getString(R.string.filename_full_sharedb));
-                    OutputStream os = new FileOutputStream(currentDB);
-                    byte[] buffer = new byte[1024];
-                    int bytesRead;
-                    if (importDBStream != null) {
-                        while ((bytesRead = importDBStream.read(buffer)) != -1) {
-                            os.write(buffer, 0, bytesRead);
-                        }
-                        importDBStream.close();
-                    }
-                    os.flush();
-                    os.close();
-                    Toast.makeText(getApplicationContext(), R.string.import_success_alert,
-                            Toast.LENGTH_LONG).show();
-
-                } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), R.string.import_cancel_alert,
-                            Toast.LENGTH_LONG).show();
-                }
-            } else {
-                //Handle negative result from activity
-                Toast.makeText(getApplicationContext(), R.string.import_cancel_alert,
-                        Toast.LENGTH_LONG).show();
+                boolean restoredFile = false;
+                Log.d(TAG, "Importing DB; restoredFile boolean is " + restoredFile);
+                //Todo: Need to test this on my phone, not emulator
+                overwriteDB(data.getData(), restoredFile);
+//                Uri uri = data.getData();
+//                try {
+//                    InputStream importDBStream = getContentResolver().openInputStream(uri);
+//                    File currentDB = getApplicationContext()
+//                            .getDatabasePath(getString(R.string.filename_full_sharedb));
+//                    OutputStream os = new FileOutputStream(currentDB);
+//                    byte[] buffer = new byte[1024];
+//                    int bytesRead;
+//                    if (importDBStream != null) {
+//                        while ((bytesRead = importDBStream.read(buffer)) != -1) {
+//                            os.write(buffer, 0, bytesRead);
+//                        }
+//                        importDBStream.close();
+//                    }
+//                    os.flush();
+//                    os.close();
+//                    Toast.makeText(getApplicationContext(), R.string.import_success_alert,
+//                            Toast.LENGTH_LONG).show();
+//
+//                } catch (IOException e) {
+//                    Toast.makeText(getApplicationContext(), R.string.import_cancel_alert,
+//                            Toast.LENGTH_LONG).show();
+//                }
+//            } else {
+//                //Handle negative result from activity
+//                Toast.makeText(getApplicationContext(), R.string.import_cancel_alert,
+//                        Toast.LENGTH_LONG).show();
             }
         }
 
@@ -906,8 +1130,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             //Get path for readable database file
             //Cache directory is used because this is not trying to save a backup
-            File storageDir = ctx.getCacheDir();
-//            File storageDir = ctx.getExternalFilesDir(null);
+            File storageDir = ctx.getExternalCacheDir();
             Log.d(TAG, "shareDB: storageDir is " + storageDir);
 
             //Make a new copy of the database and set it as the file to be sent
@@ -920,6 +1143,7 @@ public class MainActivity extends AppCompatActivity {
             //Get the Uri for the file to prepare for the Intent
             Uri fileUri = null;
             try {
+                //Todo: Change to custom FileProvider
                 fileUri = FileProvider.getUriForFile(MainActivity.this,
                         "com.gmail.mlwhal.dinnerhalp.fileprovider", backupDB);
                 Log.d(TAG, "fileUri has been created: " + fileUri);

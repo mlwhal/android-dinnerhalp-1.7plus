@@ -1,6 +1,5 @@
 package com.gmail.mlwhal.dinnerhalp;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +23,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.FileNotFoundException;
 
@@ -344,7 +345,7 @@ public class ViewDinnerActivity extends AppCompatActivity {
             assert getArguments() != null;
             int title = getArguments().getInt("title");
 
-            return new AlertDialog.Builder(getActivity())
+            return new MaterialAlertDialogBuilder(getActivity(), R.style.Theme_DinnerHalp_CustomAlertDialog)
                     .setTitle(title)
                     .setPositiveButton(R.string.alert_dialog_delete_ok,
                             new DialogInterface.OnClickListener() {

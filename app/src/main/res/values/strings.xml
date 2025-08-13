@@ -63,8 +63,8 @@
     <string name="restore_nobackup_alert">There are no backup files to restore from</string>
 
     <!--Choose backup alert dialog -->
-    <string name="choose_backup_alert_title">Choose a backup to restore. Just remember this overwrites your
-        current list of dinners!</string>
+    <string name="choose_backup_alert_title">Choose a backup to restore. This overwrites changes
+        made since then!</string>
 
     <!--Import database alert dialog  -->
     <string name="import_alert_title">Import a different database file? This will overwrite your

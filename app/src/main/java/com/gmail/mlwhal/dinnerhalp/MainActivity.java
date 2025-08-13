@@ -14,7 +14,7 @@ import java.util.Date;
 //import java.util.Objects;
 //import java.util.Locale;
 
-import android.app.AlertDialog;
+//import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.Context;
@@ -409,7 +409,9 @@ public class MainActivity extends AppCompatActivity {
             //Create a string array to hold method values; these will be the db query terms.
             final String[] methods = getResources().getStringArray(R.array.method_array);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity(),
+                    R.style.Theme_DinnerHalp_CustomAlertDialog);
             builder.setTitle(title)
                     .setItems(R.array.method_array, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int position) {
@@ -450,7 +452,9 @@ public class MainActivity extends AppCompatActivity {
             //Create a string array to hold time values; these will be the db query terms.
             final String[] times = getResources().getStringArray(R.array.time_array);
 
-            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity(),
+                    R.style.Theme_DinnerHalp_CustomAlertDialog);
             builder.setTitle(title)
                     .setItems(R.array.time_array, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int position) {
@@ -493,7 +497,9 @@ public class MainActivity extends AppCompatActivity {
             //Create a string array to hold serving values; these will be the db query terms.
             final String[] servings = getResources().getStringArray(R.array.servings_array);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity(),
+                    R.style.Theme_DinnerHalp_CustomAlertDialog);
             builder.setTitle(title)
                     .setItems(R.array.servings_array, new DialogInterface.OnClickListener() {
                         @Override
@@ -558,18 +564,26 @@ public class MainActivity extends AppCompatActivity {
                     //Restore database file from storage
                     case 3:
                         //Check whether there are backup files before launching dialog
-                        if (theActivity.checkFilesDir() != null) {
-                            Log.d(TAG, "checkFilesDir fired; checkFilesDir.length = " +
-                                    theActivity.checkFilesDir().length);
-                            theActivity.showRestoreDBDialog();
-                        } else {
-                            Log.d(TAG, "checkFilesDir() fired; checkFilesDir is null");
+                        if (theActivity.checkFilesDir() == null) {
+                            Log.d(TAG, "checkFilesDir() fired; file array = null");
                             Toast.makeText(theActivity.getApplicationContext(),
-                                    R.string.restore_nobackup_alert, Toast.LENGTH_LONG)
+                                            R.string.restore_nobackup_alert, Toast.LENGTH_LONG)
                                     .show();
                             break;
+                        } else {
+                            if (theActivity.checkFilesDir().length == 0) {
+                                Log.d(TAG, "checkFilesDir() fired; array length = 0");
+                                Toast.makeText(theActivity.getApplicationContext(),
+                                                R.string.restore_nobackup_alert, Toast.LENGTH_LONG)
+                                        .show();
+                                break;
+                            } else {
+                                Log.d(TAG, "checkFilesDir fired; checkFilesDir.length = " +
+                                        theActivity.checkFilesDir().length);
+                                theActivity.showRestoreDBDialog(theActivity.checkFilesDir().length);
+                                break;
+                            }
                         }
-                        break;
                     //Share/email item
                     case 4:
                         theActivity.shareDB(theActivity);
@@ -652,7 +666,7 @@ public class MainActivity extends AppCompatActivity {
             int title = getArguments().getInt("title");
 
             return new MaterialAlertDialogBuilder(getActivity(), R.style.Theme_DinnerHalp_CustomAlertDialog)
-                    .setMessage(title)
+                    .setTitle(title)
                     .setPositiveButton(R.string.alert_dialog_delete_ok,
                             (dialog, whichButton) -> ((MainActivity) requireActivity()).delAllDinners()
                     )
@@ -714,6 +728,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Method to retrieve any backup files in app storage; will return null if no
+    //files directory exists (empty directory returns an array of 0 length)
     public File[] checkFilesDir() {
         Context context = getApplicationContext();
 //        File file = new File(context.getFilesDir() + "/");
@@ -723,49 +738,66 @@ public class MainActivity extends AppCompatActivity {
 
     //Custom class for restore db dialog fragment
     public static class RestoreDBDialogFragment extends AppCompatDialogFragment {
-        static RestoreDBDialogFragment newInstance (int title) {
+        static RestoreDBDialogFragment newInstance (int title, int fileCount) {
             RestoreDBDialogFragment frag = new RestoreDBDialogFragment();
             Bundle args = new Bundle();
             args.putInt("title", title);
+            args.putInt("filecount", fileCount);
             frag.setArguments(args);
             return frag;
         }
 
         @NonNull
         @Override
-        public  Dialog onCreateDialog(Bundle savedInstanceState) {
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
             assert getArguments() != null;
             int title = getArguments().getInt("title");
+            int fileCount = getArguments().getInt("filecount");
 
-            //Todo: checkFilesDir and provide different dialog for different cases: 2-button if 1 file,
-            //3-button if more than 1 file
-            return new MaterialAlertDialogBuilder(getActivity(), R.style.Theme_DinnerHalp_CustomAlertDialog)
-                    .setTitle(title)
-                    .setPositiveButton(R.string.restore_positive_button,
-                            (dialog, whichButton) -> ((MainActivity) requireActivity())
-                    .restoreLastBackup()
-                    )
-                    .setNeutralButton(R.string.restore_neutral_button,
-                            (dialog, whichButton) -> ((MainActivity) requireActivity())
-                    .chooseBackupFile()
-                    )
-                    .setNegativeButton(R.string.button_cancel,
-                            (dialog, whichButton) -> ((MainActivity) requireActivity())
-                                    .doNegativeClick(2)
-                    ).create();
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(),
+                    R.style.Theme_DinnerHalp_CustomAlertDialog).setMessage(title);
+            builder.setPositiveButton(R.string.restore_positive_button,
+                    (dialog, whichButton) -> ((MainActivity) requireActivity())
+                            .restoreLastBackup(false, -1));
+            builder.setNegativeButton(R.string.button_cancel,
+                    (dialog, whichButton) -> ((MainActivity) requireActivity())
+                            .doNegativeClick(2));
+            //Neutral button to choose backup file is used only if there is more than 1 backup file
+            if (fileCount > 1) {
+                builder.setNeutralButton(R.string.restore_neutral_button,
+                        (dialog, whichButton) -> ((MainActivity) requireActivity())
+                                .chooseBackupFile());
+            } else {
+                Log.d(TAG, "File count is " + fileCount + " so no neutral button needed");
+            }
+            return builder.create();
+
+//            return new MaterialAlertDialogBuilder(getActivity(), R.style.Theme_DinnerHalp_CustomAlertDialog)
+//                    .setTitle(title)
+//                    .setPositiveButton(R.string.restore_positive_button,
+//                            (dialog, whichButton) -> ((MainActivity) requireActivity())
+//                    .restoreLastBackup()
+//                    )
+//                    .setNeutralButton(R.string.restore_neutral_button,
+//                            (dialog, whichButton) -> ((MainActivity) requireActivity())
+//                    .chooseBackupFile()
+//                    )
+//                    .setNegativeButton(R.string.button_cancel,
+//                            (dialog, whichButton) -> ((MainActivity) requireActivity())
+//                                    .doNegativeClick(2)
+//                    ).create();
         }
     }
 
-    public void showRestoreDBDialog() {
-        //Todo: Pass in String[] as arg to use for file list
+    public void showRestoreDBDialog(int fileCount) {
         AppCompatDialogFragment newFragment = RestoreDBDialogFragment.newInstance(
-                R.string.restore_alert_title);
+                R.string.restore_alert_title, fileCount);
         newFragment.show(getSupportFragmentManager(), "dialog");
 
     }
 
     //Method to restore most recent backup file
-    public void restoreLastBackup() {
+    public void restoreLastBackup(boolean chooseFiles, int pos) {
         File[] files = checkFilesDir();
         Log.d(TAG, "restoreBackupDB fired, checkFilesDir.length = " + checkFilesDir().length);
         //Double check that file list is not empty; this should never fire but who knows?
@@ -774,28 +806,53 @@ public class MainActivity extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
             //Todo: somehow kill the dialog? Test this use case
         } else {
-            //Get last backup file; the latest is always at the end of the array
-            Log.d(TAG, "restoreBackupDB: files in file array are: " +
-                    Arrays.toString(checkFilesDir()));
-            Uri fileUri = null;   //Needs to be outside try block
-            try {
-                //Todo: Create custom FileProvider as recommended here:
-                //https://developer.android.com/reference/androidx/core/content/FileProvider
-                fileUri = FileProvider.getUriForFile(MainActivity.this,
-                        "com.gmail.mlwhal.dinnerhalp.fileprovider", files[files.length-1]);
-                Log.d(TAG, "restoreBackupDB: fileUri is " + fileUri);
-            } catch (IllegalArgumentException e) {
-                Toast.makeText(getApplicationContext(), R.string.restore_cancel_alert,Toast.LENGTH_LONG)
-                        .show();
-                e.printStackTrace();
-            }
-            if (fileUri != null) {
-                boolean restoreFile = true;
-                Log.d (TAG, "restoreBackupDB: Launching overwriteDB, restoreFile = " + restoreFile);
-                overwriteDB(fileUri, restoreFile);
+            //Handle backup differently from RestoreDBDialog and ChooseFileDialog
+            if (!chooseFiles) {
+                //Get last backup file; the latest is always at the end of the array
+                Log.d(TAG, "restoreBackupDB: files in file array are: " +
+                        Arrays.toString(checkFilesDir()));
+                Uri fileUri = null;   //Needs to be outside try block
+                try {
+                    //Todo: Create custom FileProvider as recommended here:
+                    //https://developer.android.com/reference/androidx/core/content/FileProvider
+                    fileUri = FileProvider.getUriForFile(MainActivity.this,
+                            "com.gmail.mlwhal.dinnerhalp.fileprovider", files[files.length - 1]);
+                    Log.d(TAG, "restoreBackupDB: fileUri is " + fileUri);
+                } catch (IllegalArgumentException e) {
+                    Toast.makeText(getApplicationContext(), R.string.restore_cancel_alert, Toast.LENGTH_LONG)
+                            .show();
+                    e.printStackTrace();
+                }
+                if (fileUri != null) {
+                    boolean restoreFile = true;
+                    Log.d(TAG, "restoreBackupDB: Launching overwriteDB, restoreFile = " + restoreFile);
+                    overwriteDB(fileUri, restoreFile);
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.restore_cancel_alert,
+                            Toast.LENGTH_LONG).show();
+                }
             } else {
-                Toast.makeText(getApplicationContext(), R.string.restore_cancel_alert,
-                        Toast.LENGTH_LONG).show();
+                Log.d(TAG, "restoreBackupDB: Coming from ChooseFileDialog");
+                Uri fileUri = null;   //Needs to be outside try block
+                try {
+                    //Todo: Create custom FileProvider as recommended here:
+                    //https://developer.android.com/reference/androidx/core/content/FileProvider
+                    fileUri = FileProvider.getUriForFile(MainActivity.this,
+                            "com.gmail.mlwhal.dinnerhalp.fileprovider", files[pos]);
+                    Log.d(TAG, "restoreBackupDB: fileUri is " + fileUri);
+                } catch (IllegalArgumentException e) {
+                    Toast.makeText(getApplicationContext(), R.string.restore_cancel_alert, Toast.LENGTH_LONG)
+                            .show();
+                    e.printStackTrace();
+                }
+                if (fileUri != null) {
+                    boolean restoreFile = true;
+                    Log.d(TAG, "restoreBackupDB: Launching overwriteDB, restoreFile = " + restoreFile);
+                    overwriteDB(fileUri, restoreFile);
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.restore_cancel_alert,
+                            Toast.LENGTH_LONG).show();
+                }
             }
 //                try {
 //                    InputStream restoreDBStream = getContentResolver().openInputStream(fileUri);
@@ -837,26 +894,72 @@ public class MainActivity extends AppCompatActivity {
             backupFileNames[j] = backupFileName;
         }
         Log.d(TAG, "getBackupList: backupFileNames are " + Arrays.toString(backupFileNames));
-        MaterialAlertDialogBuilder chooseFileDialogBuilder = new MaterialAlertDialogBuilder(MainActivity.this,
-                R.style.Theme_DinnerHalp_CustomAlertDialog);
-        chooseFileDialogBuilder.setTitle(R.string.choose_backup_alert_title);
-        chooseFileDialogBuilder.setItems(backupFileNames, new DialogInterface.OnClickListener() {
-            @Override
-                    public void onClick(DialogInterface dialog, int pos) {
-                Uri fileUri = Uri.fromFile(files[pos]);
-                Log.d(TAG, "chooseBackupFile: selected fileUri is " + fileUri);
-                boolean restoredFile = true;
-                overwriteDB(fileUri, restoredFile);
-            }
-        });
-        chooseFileDialogBuilder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-        androidx.appcompat.app.AlertDialog dialog = chooseFileDialogBuilder.create();
-        dialog.show();
+        //Todo: Replace this builder stuff with custom dialog class
+        showChooseFileDialog(backupFileNames);
+//        MaterialAlertDialogBuilder chooseFileDialogBuilder = new MaterialAlertDialogBuilder(MainActivity.this,
+//                R.style.Theme_DinnerHalp_CustomAlertDialog);
+//        chooseFileDialogBuilder.setTitle(R.string.choose_backup_alert_title);
+//        chooseFileDialogBuilder.setItems(backupFileNames, new DialogInterface.OnClickListener() {
+//            @Override
+//                    public void onClick(DialogInterface dialog, int pos) {
+//                Uri fileUri = Uri.fromFile(files[pos]);
+//                Log.d(TAG, "chooseBackupFile: selected fileUri is " + fileUri);
+//                boolean restoredFile = true;
+//                overwriteDB(fileUri, restoredFile);
+//            }
+//        });
+//        chooseFileDialogBuilder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                doNegativeClick(2);
+//                            }
+//                        });
+//        androidx.appcompat.app.AlertDialog dialog = chooseFileDialogBuilder.create();
+//        dialog.show();
+    }
+
+    //Custom class for choose file dialog fragment
+    public static class ChooseFileDialogFragment extends AppCompatDialogFragment {
+        static ChooseFileDialogFragment newInstance (int title, String[] filePaths) {
+            ChooseFileDialogFragment frag = new ChooseFileDialogFragment();
+            Bundle args = new Bundle();
+            args.putInt("title", title);
+            args.putStringArray("filepaths", filePaths);
+            frag.setArguments(args);
+            return frag;
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            assert getArguments() != null;
+            int title = getArguments().getInt("title");
+            String[] filePaths = getArguments().getStringArray("filepaths");
+
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(),
+                    R.style.Theme_DinnerHalp_CustomAlertDialog).setTitle(title);
+            builder.setItems(filePaths, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int pos) {
+                    Log.d(TAG, "ChooseFileDialog: List item clicked at position " + pos);
+                    ((MainActivity) requireActivity()).restoreLastBackup(true, pos);
+                }
+            });
+            builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ((MainActivity) requireActivity()).doNegativeClick(2);
+                }
+            });
+            return builder.create();
+        }
+    }
+
+    public void showChooseFileDialog(String[] filePaths) {
+        AppCompatDialogFragment newFragment = ChooseFileDialogFragment.newInstance(
+                R.string.choose_backup_alert_title, filePaths);
+        newFragment.show(getSupportFragmentManager(), "dialog");
+
     }
 
     //Method to overwrite existing DB with restored backup or imported file;

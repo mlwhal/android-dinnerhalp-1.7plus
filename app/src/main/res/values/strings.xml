@@ -49,26 +49,26 @@
     <string name="backup_db_success">File copied to storage</string>
     <string name="backup_db_fail">Couldn\'t copy file to storage</string>
     <string name="backup_db_file_deleted">One old backup was deleted; go to Settings to change
-    how many old backups to keep</string>
-    <string name="backup_db_files_deleted">Old backups were deleted; go to Settings to change how
-    many old backups to keep</string>
+    this</string>
+    <string name="backup_db_files_deleted">Old backups were deleted; go to Settings to change this</string>
 
     <!-- Restore database alert dialog -->
-    <string name="restore_alert_title">Restore an older database file? You will lose any changes
-        you made since that backup.</string>
-    <string name="restore_positive_button">Restore most recent file</string>
+    <string name="restore_alert_title">Restore an older database file?</string>
+    <string name="restore_alert_text">You will lose any changes you made since that backup.</string>
+    <string name="restore_positive_button_1">Restore backup file</string>
+    <string name="restore_positive_button_recent">Restore most recent file</string>
     <string name="restore_neutral_button">Choose file to restore</string>
     <string name="restore_success_alert">Backup has been restored</string>
     <string name="restore_cancel_alert">Action was canceled</string>
     <string name="restore_nobackup_alert">There are no backup files to restore from</string>
 
     <!--Choose backup alert dialog -->
-    <string name="choose_backup_alert_title">Choose a backup to restore. This overwrites changes
-        made since then!</string>
+    <string name="choose_backup_alert_title">Choose a backup to restore</string>
+    <string name="choose_backup_alert_text">This overwrites changes made since the backup was created!</string>
 
     <!--Import database alert dialog  -->
-    <string name="import_alert_title">Import a different database file? This will overwrite your
-        current file.</string>
+    <string name="import_alert_title">Import a different database file?</string>
+    <string name="import_alert_text">This will overwrite your current file.</string>
     <string name="import_positive_button">Import</string>
     <string name="import_chooser_title">Import from</string>
     <string name="import_success_alert">File was imported successfully</string>
@@ -152,7 +152,7 @@
     <!--DinnerListActivity  -->
     <string name="title_activity_dinner_list">DinnerListActivity</string>
     <string name="dinner_list_title">Dinners</string>
-    <string name="dinner_list_hint">Press and hold to select multiple dinners</string>
+    <string name="dinner_list_hint">Press and hold to select \nmultiple dinners</string>
     <string name="button_help">\?</string>
     <string name="button_ok">Got It</string>
     <string name="no_dinners">No dinners found! Tap to add.</string>
@@ -228,7 +228,7 @@
     <string name="title_activity_about_app">AboutAppActivity</string>
     <string name="about_app_title">About DinnerHalp</string>
     <string name="about_app_class">com.gmail.mlwhal.dinnerhalp.AboutAppActivity</string>
-    <string name="text_about_app">DinnerHalp 1.9 by Marika Whaley \ncopyright 2015–2025</string>
+    <string name="text_about_app">DinnerHalp 1.10 by Marika Whaley \ncopyright 2015–2025</string>
     <string name="image_dinnerhalp_icon">DinnerHalp app icon</string>
 
     <string name="title_activity_settings">Settings</string>

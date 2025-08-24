@@ -28,7 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:text="@string/button_help"
-            style="@style/HelpButton" />
+            style="@style/HelpButton"
+            tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>
 

@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 //import java.util.Objects;
 //import java.util.Locale;
 
@@ -48,8 +50,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gmail.mlwhal.dinnerhalp.ui.main.SectionsPagerAdapter;
@@ -136,29 +140,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Show FAB only on the SearchFragment (case 0)
-        //Todo: Forget this, show FAB on both fragments
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset,
-                                       int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-//                switch (position) {
-//                    case 0:
-//                        fab.show();
-//                        break;
-//                    case 1:
-//                        fab.hide();
-//                        break;
-//                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+        //Forget this, FAB is now shown on both fragments
+//        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset,
+//                                       int positionOffsetPixels) {
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+////                switch (position) {
+////                    case 0:
+////                        fab.show();
+////                        break;
+////                    case 1:
+////                        fab.hide();
+////                        break;
+////                }
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//            }
+//        });
 
         //Initialize PreferenceManager with default values (recommended by
         //https://developer.android.com/guide/topics/ui/settings.html)
@@ -731,17 +735,17 @@ public class MainActivity extends AppCompatActivity {
     //files directory exists (empty directory returns an array of 0 length)
     public File[] checkFilesDir() {
         Context context = getApplicationContext();
-//        File file = new File(context.getFilesDir() + "/");
         File file = new File(context.getExternalFilesDir(null), "/");
         return file.listFiles();
     }
 
     //Custom class for restore db dialog fragment
     public static class RestoreDBDialogFragment extends AppCompatDialogFragment {
-        static RestoreDBDialogFragment newInstance (int title, int fileCount) {
+        static RestoreDBDialogFragment newInstance (int title, int text, int fileCount) {
             RestoreDBDialogFragment frag = new RestoreDBDialogFragment();
             Bundle args = new Bundle();
             args.putInt("title", title);
+            args.putInt("text", text);
             args.putInt("filecount", fileCount);
             frag.setArguments(args);
             return frag;
@@ -752,46 +756,37 @@ public class MainActivity extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             assert getArguments() != null;
             int title = getArguments().getInt("title");
+            int text = getArguments().getInt("text");
             int fileCount = getArguments().getInt("filecount");
 
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(),
-                    R.style.Theme_DinnerHalp_CustomAlertDialog).setMessage(title);
-            builder.setPositiveButton(R.string.restore_positive_button,
-                    (dialog, whichButton) -> ((MainActivity) requireActivity())
-                            .restoreLastBackup(false, -1));
+                    R.style.Theme_DinnerHalp_CustomAlertDialog).setTitle(title);
+            builder.setMessage(text);
             builder.setNegativeButton(R.string.button_cancel,
                     (dialog, whichButton) -> ((MainActivity) requireActivity())
                             .doNegativeClick(2));
             //Neutral button to choose backup file is used only if there is more than 1 backup file
             if (fileCount > 1) {
+                builder.setPositiveButton(R.string.restore_positive_button_recent,
+                        (dialog, whichButton) -> ((MainActivity) requireActivity())
+                                .restoreLastBackup(false, -1));
                 builder.setNeutralButton(R.string.restore_neutral_button,
                         (dialog, whichButton) -> ((MainActivity) requireActivity())
                                 .chooseBackupFile());
             } else {
+                builder.setPositiveButton(R.string.restore_positive_button_1,
+                        (dialog, whichButton) -> ((MainActivity) requireActivity())
+                                .restoreLastBackup(false, -1));
                 Log.d(TAG, "File count is " + fileCount + " so no neutral button needed");
             }
             return builder.create();
 
-//            return new MaterialAlertDialogBuilder(getActivity(), R.style.Theme_DinnerHalp_CustomAlertDialog)
-//                    .setTitle(title)
-//                    .setPositiveButton(R.string.restore_positive_button,
-//                            (dialog, whichButton) -> ((MainActivity) requireActivity())
-//                    .restoreLastBackup()
-//                    )
-//                    .setNeutralButton(R.string.restore_neutral_button,
-//                            (dialog, whichButton) -> ((MainActivity) requireActivity())
-//                    .chooseBackupFile()
-//                    )
-//                    .setNegativeButton(R.string.button_cancel,
-//                            (dialog, whichButton) -> ((MainActivity) requireActivity())
-//                                    .doNegativeClick(2)
-//                    ).create();
         }
     }
 
     public void showRestoreDBDialog(int fileCount) {
         AppCompatDialogFragment newFragment = RestoreDBDialogFragment.newInstance(
-                R.string.restore_alert_title, fileCount);
+                R.string.restore_alert_title, R.string.restore_alert_text, fileCount);
         newFragment.show(getSupportFragmentManager(), "dialog");
 
     }
@@ -804,7 +799,7 @@ public class MainActivity extends AppCompatActivity {
         if (files == null) {
             Toast.makeText(getApplicationContext(), R.string.restore_nobackup_alert,
                     Toast.LENGTH_LONG).show();
-            //Todo: somehow kill the dialog? Test this use case
+            //Todo: somehow kill the dialog? Test this use case if possible
         } else {
             //Handle backup differently from RestoreDBDialog and ChooseFileDialog
             if (!chooseFiles) {
@@ -854,33 +849,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                 }
             }
-//                try {
-//                    InputStream restoreDBStream = getContentResolver().openInputStream(fileUri);
-//                    File currentDB = getApplicationContext()
-//                            .getDatabasePath(getString(R.string.filename_full_sharedb));
-//                    OutputStream os = new FileOutputStream(currentDB);
-//                    byte[] buffer = new byte[1024];
-//                    int bytesRead;
-//                    if (restoreDBStream != null) {
-//                        while ((bytesRead = restoreDBStream.read(buffer)) != -1) {
-//                            os.write(buffer, 0, bytesRead);
-//                        }
-//                        restoreDBStream.close();
-//                    }
-//                    os.flush();
-//                    os.close();
-//                    Toast.makeText(getApplicationContext(), R.string.restore_success_alert,
-//                            Toast.LENGTH_LONG).show();
-//                } catch (IOException e) {
-//                    Toast.makeText(getApplicationContext(), R.string.restore_cancel_alert,
-//                            Toast.LENGTH_LONG).show();
-//
-//                }
-//
-//            } else {
-//                Toast.makeText(getApplicationContext(), R.string.restore_cancel_alert,
-//                        Toast.LENGTH_LONG).show();
-//            }
+
         }
     }
 
@@ -893,37 +862,20 @@ public class MainActivity extends AppCompatActivity {
             String backupFileName = backupFilePath.substring(67);
             backupFileNames[j] = backupFileName;
         }
+        //There are some cases where the file names aren't in chronological order, so let's sort them
+        Arrays.sort(backupFileNames);
         Log.d(TAG, "getBackupList: backupFileNames are " + Arrays.toString(backupFileNames));
-        //Todo: Replace this builder stuff with custom dialog class
+        //Launch custom dialog to choose a backup file
         showChooseFileDialog(backupFileNames);
-//        MaterialAlertDialogBuilder chooseFileDialogBuilder = new MaterialAlertDialogBuilder(MainActivity.this,
-//                R.style.Theme_DinnerHalp_CustomAlertDialog);
-//        chooseFileDialogBuilder.setTitle(R.string.choose_backup_alert_title);
-//        chooseFileDialogBuilder.setItems(backupFileNames, new DialogInterface.OnClickListener() {
-//            @Override
-//                    public void onClick(DialogInterface dialog, int pos) {
-//                Uri fileUri = Uri.fromFile(files[pos]);
-//                Log.d(TAG, "chooseBackupFile: selected fileUri is " + fileUri);
-//                boolean restoredFile = true;
-//                overwriteDB(fileUri, restoredFile);
-//            }
-//        });
-//        chooseFileDialogBuilder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                doNegativeClick(2);
-//                            }
-//                        });
-//        androidx.appcompat.app.AlertDialog dialog = chooseFileDialogBuilder.create();
-//        dialog.show();
     }
 
     //Custom class for choose file dialog fragment
     public static class ChooseFileDialogFragment extends AppCompatDialogFragment {
-        static ChooseFileDialogFragment newInstance (int title, String[] filePaths) {
+        static ChooseFileDialogFragment newInstance (int title, int text, String[] filePaths) {
             ChooseFileDialogFragment frag = new ChooseFileDialogFragment();
             Bundle args = new Bundle();
             args.putInt("title", title);
+            args.putInt("text", text);
             args.putStringArray("filepaths", filePaths);
             frag.setArguments(args);
             return frag;
@@ -934,17 +886,43 @@ public class MainActivity extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             assert getArguments() != null;
             int title = getArguments().getInt("title");
+            int text = getArguments().getInt("text");
             String[] filePaths = getArguments().getStringArray("filepaths");
 
+            //Create custom view that holds both explanatory text and the listView
+            // containing the filePaths. You can't use setItems here but rather setAdapter
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(),
                     R.style.Theme_DinnerHalp_CustomAlertDialog).setTitle(title);
-            builder.setItems(filePaths, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int pos) {
-                    Log.d(TAG, "ChooseFileDialog: List item clicked at position " + pos);
-                    ((MainActivity) requireActivity()).restoreLastBackup(true, pos);
-                }
-            });
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            View view = inflater.inflate(R.layout.dialog_choose_dbfile, null);
+            //Put warning text into dialog TextView
+            TextView warningText = view.findViewById(R.id.dialog_textview_choosedb);
+            warningText.setText(text);
+            //Put files list into dialog ListView using an adapter
+            if (filePaths != null) {
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                        android.R.layout.simple_list_item_1,
+                        filePaths);
+                ListView listView = view.findViewById(R.id.dialog_listview_choosedb);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
+                        Log.d(TAG, "ChooseFileDialog: List item clicked at position " + pos);
+                        ((MainActivity) requireActivity()).restoreLastBackup(true, pos);
+                        Objects.requireNonNull(getDialog()).dismiss();
+                    }
+                });
+            }
+
+//            builder.setItems(filePaths, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int pos) {
+//                    Log.d(TAG, "ChooseFileDialog: List item clicked at position " + pos);
+//                    ((MainActivity) requireActivity()).restoreLastBackup(true, pos);
+//                }
+//            });
+            builder.setView(view);
             builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -957,7 +935,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void showChooseFileDialog(String[] filePaths) {
         AppCompatDialogFragment newFragment = ChooseFileDialogFragment.newInstance(
-                R.string.choose_backup_alert_title, filePaths);
+                R.string.choose_backup_alert_title,
+                R.string.choose_backup_alert_text, filePaths);
         newFragment.show(getSupportFragmentManager(), "dialog");
 
     }
@@ -1008,32 +987,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    //Custom class for dialog fragment to choose which backup to restore
-//    public static class ChooseBackupDialogFragment extends AppCompatDialogFragment {
-//        static ChooseBackupDialogFragment newInstance(int title) {
-//            ChooseBackupDialogFragment frag = new ChooseBackupDialogFragment();
-//            Bundle args = new Bundle();
-//            args.putInt("title", title);
-//            frag.setArguments(args);
-//            return frag;
-//        }
-//
-//        @NonNull
-//        @Override
-//        public Dialog onCreateDialog(Bundle savedInstanceState) {
-//            assert getArguments() != null;
-//            int title = getArguments().getInt("title");
-//            //Create a string array to list backup file names
-//            File[] files = checkFilesDir();
-//        }
-//    }
-
     //Custom class for import dialog fragment
     public static class ImportDBDialogFragment extends AppCompatDialogFragment {
-        static ImportDBDialogFragment newInstance(int title) {
+        static ImportDBDialogFragment newInstance(int title, int text) {
             ImportDBDialogFragment frag = new ImportDBDialogFragment();
             Bundle args = new Bundle();
             args.putInt("title", title);
+            args.putInt("text", text);
             frag.setArguments(args);
             return frag;
         }
@@ -1043,9 +1003,11 @@ public class MainActivity extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             assert getArguments() != null;
             int title = getArguments().getInt("title");
+            int text = getArguments().getInt("text");
 
             return new MaterialAlertDialogBuilder(getActivity(), R.style.Theme_DinnerHalp_CustomAlertDialog)
-                    .setMessage(title)
+                    .setTitle(title)
+                    .setMessage(text)
                     .setPositiveButton(R.string.import_positive_button,
                             (dialog, whichButton) -> ((MainActivity) requireActivity())
                                     .importDBFileChooser()
@@ -1055,12 +1017,11 @@ public class MainActivity extends AppCompatActivity {
                                     .doNegativeClick(1)
                     ).create();
         }
-
     }
 
     void showImportDBDialog() {
         AppCompatDialogFragment newFragment = ImportDBDialogFragment.newInstance(
-                R.string.import_alert_title);
+                R.string.import_alert_title, R.string.import_alert_text);
         newFragment.show(getSupportFragmentManager(), "dialog");
 
     }
@@ -1119,12 +1080,9 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        //Check shared preferences and delete any extra stored backup files
+        //Delete any extra stored backup files beyond number from SharedPreferences
         //This only happens when the user wants to backup, not share, the db
         if (!shareStatus) {
-//            int fileNumberPref = checkSharedPrefs();
-//            Log.d(TAG, "copyDBtoStorage: fileNumberPref = " + fileNumberPref);
-
             try {
                 File storageDir = getApplicationContext().getExternalFilesDir(null);
                 if (storageDir.canRead()) {
@@ -1195,33 +1153,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Importing DB; restoredFile boolean is " + restoredFile);
                 //Todo: Need to test this on my phone, not emulator
                 overwriteDB(data.getData(), restoredFile);
-//                Uri uri = data.getData();
-//                try {
-//                    InputStream importDBStream = getContentResolver().openInputStream(uri);
-//                    File currentDB = getApplicationContext()
-//                            .getDatabasePath(getString(R.string.filename_full_sharedb));
-//                    OutputStream os = new FileOutputStream(currentDB);
-//                    byte[] buffer = new byte[1024];
-//                    int bytesRead;
-//                    if (importDBStream != null) {
-//                        while ((bytesRead = importDBStream.read(buffer)) != -1) {
-//                            os.write(buffer, 0, bytesRead);
-//                        }
-//                        importDBStream.close();
-//                    }
-//                    os.flush();
-//                    os.close();
-//                    Toast.makeText(getApplicationContext(), R.string.import_success_alert,
-//                            Toast.LENGTH_LONG).show();
-//
-//                } catch (IOException e) {
-//                    Toast.makeText(getApplicationContext(), R.string.import_cancel_alert,
-//                            Toast.LENGTH_LONG).show();
-//                }
-//            } else {
-//                //Handle negative result from activity
-//                Toast.makeText(getApplicationContext(), R.string.import_cancel_alert,
-//                        Toast.LENGTH_LONG).show();
             }
         }
 

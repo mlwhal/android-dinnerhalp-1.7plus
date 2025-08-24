@@ -10,7 +10,7 @@
             path="data/"
             name="data_dir"/>
 
-        <cache-path
+        <external-cache-path
             path="/"
             name="cache_dir" />
 

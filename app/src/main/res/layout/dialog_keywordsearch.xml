@@ -8,8 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minWidth="500dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="24dp"
         android:inputType="text"
         android:hint="@string/keyword_hint"
         style="@style/Theme.DinnerHalp.CustomAlertDialog"/>

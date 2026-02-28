@@ -1,5 +1,6 @@
 package com.gmail.mlwhal.dinnerhalp;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,16 +24,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+//import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+//import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+//import java.time.Month;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+//import java.time.ZonedDateTime;
+//import java.util.Calendar;
+//import java.util.Locale;
 //import java.util.Objects;
 
 public class AddDinnerActivity extends AppCompatActivity {
@@ -47,6 +60,9 @@ public class AddDinnerActivity extends AppCompatActivity {
     private Spinner mMethodSpinner;
     private Spinner mTimeSpinner;
     private Spinner mServingsSpinner;
+    private TextView mDateMadeText;
+    private String mDateMade = null;
+    private ImageButton mDateClearButton;
     private ImageButton mSetPicButton;
     private ImageButton mChangePicButton;
     private ImageButton mRemovePicButton;
@@ -133,6 +149,20 @@ public class AddDinnerActivity extends AppCompatActivity {
                 this, R.array.servings_array, android.R.layout.simple_spinner_item);
         servingsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mServingsSpinner.setAdapter(servingsAdapter);
+
+        //Date made stuff
+        mDateMadeText = findViewById(R.id.texview_datemade);
+        ImageButton mDateMadeButton = findViewById(R.id.button_add_datemade);
+        mDateMadeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
+        mDateClearButton = findViewById(R.id.button_clear_datemade);
+
+        //Hide for now; will show if dinner is being updated
+        mDateClearButton.setVisibility(View.GONE);
 
         //Initialize image button
         mSetPicButton = findViewById(R.id.button_add_image);
@@ -347,6 +377,25 @@ public class AddDinnerActivity extends AppCompatActivity {
                     dinner.getString(dinner.getColumnIndexOrThrow(
                             DinnersDbContract.DinnerEntry.KEY_SERVINGS))));
 
+            //Fill in date made if there is one, and show delete button
+            String dateMadeString = dinner.getString(dinner.getColumnIndexOrThrow(
+                    DinnersDbContract.DinnerEntry.KEY_DATEMADE));
+            if (dateMadeString != null && !dateMadeString.equals("")) {
+                mDateMadeText.setText(getString(R.string.text_datechosen,
+                        dateMadeString));
+                mDateClearButton.setVisibility(View.VISIBLE);
+            }
+            //Set a click listener that prompts before deleting an existing date made
+            //We set this regardless of whether or not the existing dinner has a date
+            //in case a date is added during this activity
+            //Todo: Should this click listener be set earlier, in onCreate?
+            mDateClearButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    showDateClearDialog();
+                }
+            });
+
+
             //Get image data from the picpath and picdata columns
             String imageString = dinner.getString(dinner.getColumnIndexOrThrow(
                     DinnersDbContract.DinnerEntry.KEY_PICPATH));
@@ -454,6 +503,8 @@ public class AddDinnerActivity extends AppCompatActivity {
         String method = mMethodSpinner.getSelectedItem().toString();
         String time = mTimeSpinner.getSelectedItem().toString();
         String servings = mServingsSpinner.getSelectedItem().toString();
+        //mDateMade is global b/c the TextView contains more than the date, so it's not collected here
+        Log.d(TAG, "In saveDinner; mDateMade = " + mDateMade);
         String picpath;
         byte[] imageByteArray;
 
@@ -487,7 +538,7 @@ public class AddDinnerActivity extends AppCompatActivity {
         if (mRowId == null) {
             //Todo: Does it ever crash on a new dinner when name is not unique?
             mDbHelper.open();
-            long id = mDbHelper.createDinner(name, method, time, servings, picpath,
+            long id = mDbHelper.createDinner(name, method, time, servings, mDateMade, picpath,
                     imageByteArray, recipe);
             mDbHelper.close();
 //            Log.d(TAG, "id = " + id);
@@ -510,8 +561,8 @@ public class AddDinnerActivity extends AppCompatActivity {
             boolean updateSuccess = false;
             try {
                 mDbHelper.open();
-                updateSuccess = mDbHelper.updateDinner(
-                        mRowId, name, method, time, servings, picpath, imageByteArray, recipe);
+                updateSuccess = mDbHelper.updateDinner(mRowId, name, method, time, servings,
+                        mDateMade, picpath, imageByteArray, recipe);
                 mDbHelper.close();
             } catch (SQLiteConstraintException e) {
                 Log.d(TAG, "Exception caught: " + e);
@@ -666,7 +717,8 @@ public class AddDinnerActivity extends AppCompatActivity {
     }
 
     void showShareDialog() {
-        AppCompatDialogFragment newFragment = ShareDialogFragment.newInstance(R.string.share_alert_title);
+        AppCompatDialogFragment newFragment = ShareDialogFragment.newInstance(
+                R.string.share_alert_title);
         newFragment.show(getSupportFragmentManager(), "dialog");
     }
 
@@ -684,6 +736,105 @@ public class AddDinnerActivity extends AppCompatActivity {
         mRecipeText = shareIntent.getExtras().getString(Intent.EXTRA_TEXT);
         //Refresh the fields to show updated recipe
         populateFields();
+    }
+
+    //Methods for date picker dialog
+    private void showDatePickerDialog() {
+        // Get current date for the picker's initial selection
+        LocalDate today = LocalDate.now();
+        // Create a millis value for today's local date to set in the picker
+        long todayInMillis = today.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+        // Create and show the DatePickerDialog
+        MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
+        builder.setTitleText(R.string.date_alert_choose)
+                .setSelection(todayInMillis);
+        Log.d(TAG, "Today (UTC) in ms is " + MaterialDatePicker.todayInUtcMilliseconds());
+        Log.d(TAG, "Today (local) in ms is " + todayInMillis);
+        //Todo: Check in the evening whether date is correct for local time zone
+
+        //Build the date picker instance
+        final MaterialDatePicker<Long> materialDatePicker = builder.build();
+
+        // Add a listener for when the positive button is clicked
+        materialDatePicker.addOnPositiveButtonClickListener
+                (new MaterialPickerOnPositiveButtonClickListener<Long>() {
+            @Override
+            public void onPositiveButtonClick(Long selection) {
+                // The selection is a Long (timestamp in UTC milliseconds)
+                // Convert selection to LocalDate format w/no zone offset (otherwise the day is off)
+                LocalDate localDate = Instant.ofEpochMilli(selection)
+                        .atZone(ZoneOffset.UTC).toLocalDate();
+                Log.d(TAG, "localDate is " + localDate);
+                mDateMade = localDate.toString();
+                // Create full string needed for mDateMadeText
+                String dateString = getString(R.string.text_datechosen,
+                        mDateMade);
+                //Update date made TextView
+                mDateMadeText.setText(dateString);
+                Log.d(TAG, "Pos click in date picker; date selected is " + selection);
+                Log.d(TAG, "Pos click in date picker; dateString is " + dateString);
+                //Show the mDateClearButton and change its click listener if creating a new dinner
+                mDateClearButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        // Show the dialog
+        materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
+    }
+
+    //Class and methods for an alert dialog to clear date made from a dinner
+    public static class ClearDateDialogFragment extends AppCompatDialogFragment {
+        static ClearDateDialogFragment newInstance(int title, int message) {
+            ClearDateDialogFragment frag = new ClearDateDialogFragment();
+            Bundle args = new Bundle();
+            args.putInt("title", title);
+            args.putInt("message", message);
+            frag.setArguments(args);
+            return frag;
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            assert getArguments() != null;
+            int title = getArguments().getInt("title");
+            int message = getArguments().getInt("message");
+
+            return new MaterialAlertDialogBuilder(getActivity(), R.style.Theme_DinnerHalp_NightAlertDialog)
+                    .setTitle(title)
+                    .setMessage(message)
+                    .setPositiveButton(R.string.alert_dialog_remove,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    Log.d(TAG, "Clear date: remove button clicked");
+                                    ((AddDinnerActivity) requireActivity()).clearDateMade();
+                                }
+                            })
+                    .setNegativeButton(R.string.button_cancel,
+                            new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    //Nothing needed here to cancel
+                                }
+                            })
+                    .create();
+        }
+    }
+
+    void showDateClearDialog() {
+        AppCompatDialogFragment newFragment = ClearDateDialogFragment.newInstance(
+                R.string.date_alert_clear_title, R.string.date_alert_clear_message);
+        newFragment.show(getSupportFragmentManager(), "dialog");
+    }
+
+    void clearDateMade() {
+        //Restore everything back to a dinner with no date
+        mDateMade = null;
+        mDateMadeText.setText(R.string.text_datemade);
+        mDateClearButton.setVisibility(View.GONE);
     }
 
     //Class and methods for an alert dialog to let user remove an image from a dinner

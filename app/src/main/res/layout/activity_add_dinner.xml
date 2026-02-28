@@ -46,6 +46,7 @@
             android:layout_gravity="center_vertical"
             android:paddingStart="0dp"
             android:paddingEnd="16dp"
+            android:paddingBottom="16dp"
             android:text="@string/dinner_add_hint" />
 
         <TextView
@@ -101,12 +102,53 @@
 
             </LinearLayout>
 
-            <Spinner
-                android:id="@+id/spinner_servings"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/touch_target_min"
-                android:contentDescription="@string/spinner_servings_descrip"
-                android:paddingBottom="16dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/spinner_servings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/touch_target_min"
+                    android:contentDescription="@string/spinner_servings_descrip"
+                    android:paddingBottom="16dp"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="64dp"
+                    />
+
+                <ImageButton
+                    android:id="@+id/button_add_datemade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/image_add_datemade"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="0dp"
+                    android:paddingTop="5dp"
+                    android:src="@drawable/ic_add_datemade"
+                    style="?android:borderlessButtonStyle"
+                    />
+
+                <TextView
+                    android:id="@+id/texview_datemade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="20dp"
+                    android:text="@string/text_datemade"
+                    style="@style/ViewDinnerText"
+                    />
+
+                <ImageButton
+                    android:id="@+id/button_clear_datemade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/image_clear_datemade"
+                    android:paddingTop="5dp"
+                    android:padding="0dp"
+                    android:src="@drawable/ic_clear_datemade"/>
+
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/button_add_image"

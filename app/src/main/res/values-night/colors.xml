@@ -11,5 +11,7 @@
     <color name="colorLongPressSelected">#7f0000</color>
     <color name="colorTextButton">@color/colorPrimary</color>
     <color name="colorUnselectedText">#DDDDDD</color>
+    <color name="colorActivityIcon">#b3b3b3</color>
+    <color name="colorActivityIconBg">#333333</color>
 
 </resources>

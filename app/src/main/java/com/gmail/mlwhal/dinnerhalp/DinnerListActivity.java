@@ -1,5 +1,6 @@
 package com.gmail.mlwhal.dinnerhalp;
 
+import android.app.Activity;
 import android.app.Dialog;
 //import android.app.DialogFragment;
 import androidx.appcompat.app.AppCompatDialogFragment;
@@ -20,13 +21,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 //import java.util.Objects;
@@ -53,6 +57,8 @@ public class DinnerListActivity extends AppCompatActivity {
     private TextView hintText;
     private TextView okButton;
 
+    private Spinner mSortSpinner;
+
     //TAG String used for logging
     private static final String TAG = DinnerListActivity.class.getSimpleName();
 
@@ -70,6 +76,28 @@ public class DinnerListActivity extends AppCompatActivity {
         helpButton.setVisibility(View.GONE);
         hintText.setVisibility(View.GONE);
         okButton.setVisibility(View.GONE);
+
+        //Initialize spinner for sort order
+        mSortSpinner = findViewById(R.id.spinner_sort);
+        ArrayAdapter<CharSequence> sortAdapter = ArrayAdapter.createFromResource(
+                this, R.array.sort_order_array, android.R.layout.simple_spinner_item);
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSortSpinner.setAdapter(sortAdapter);
+
+        //Handle spinner selections
+        mSortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
+                //Todo: Handle different sorting methods
+                Log.d(TAG, "Spinner item selected, pos is " + mSortSpinner.getItemAtPosition(pos));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                //Required method
+            }
+        });
+
 
         //Check SharedPreferences for pro mode in order to show helpButton only if false
         checkSharedPrefs();

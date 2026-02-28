@@ -15,6 +15,7 @@
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="actionBarTheme">@style/ThemeOverlay.DinnerHalp.ActionBar</item>
         <item name="alertDialogTheme">@style/Theme.DinnerHalp.NightAlertDialog</item>
+        <item name="materialCalendarTheme">@style/ThemeOverlay.App.NightDatePicker</item>
         <!-- Color for active toggles and edit text fields everywhere but DinnerListActivity -->
         <item name="android:colorControlActivated">@color/colorDefaultText</item>
     </style>
@@ -55,6 +56,11 @@
         <item name="colorPrimary">@color/colorDefaultText</item>
         <!-- colorAccent controls active radio button -->
         <item name="colorAccent">@color/colorDefaultText</item>
+    </style>
+
+    <style name="ThemeOverlay.App.NightDatePicker" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorPrimary">@color/colorDefaultText</item>
+        <item name="colorOnPrimary">@color/colorBackground</item>
     </style>
 
     <style name="Widget.Custom.Button.Borderless" parent="Widget.MaterialComponents.Button.UnelevatedButton">

@@ -20,13 +20,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.FileNotFoundException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 public class ViewDinnerActivity extends AppCompatActivity {
 
@@ -37,6 +44,7 @@ public class ViewDinnerActivity extends AppCompatActivity {
     private TextView mMethodText;
     private TextView mTimeText;
     private TextView mServingsText;
+    private TextView mDateMadeText;
     private ImageView mDinnerImage;
     private int mImageScalePref;
     private boolean mImageStorePref;
@@ -62,6 +70,7 @@ public class ViewDinnerActivity extends AppCompatActivity {
         mMethodText = findViewById(R.id.textview_method);
         mTimeText = findViewById(R.id.textview_time);
         mServingsText = findViewById(R.id.textview_servings);
+        mDateMadeText = findViewById(R.id.texview_datemade);
         mDinnerImage = findViewById(R.id.image_dinner_thumb);
         mRecipeText = findViewById(R.id.textview_recipe);
 
@@ -175,6 +184,16 @@ public class ViewDinnerActivity extends AppCompatActivity {
 
             mServingsText.setText(dinner.getString(dinner.getColumnIndexOrThrow(
                     DinnersDbContract.DinnerEntry.KEY_SERVINGS)));
+
+            String dateMadeString = dinner.getString(dinner.getColumnIndexOrThrow(
+                    DinnersDbContract.DinnerEntry.KEY_DATEMADE));
+            if (dateMadeString != null && !dateMadeString.equals("")) {
+                mDateMadeText.setText(getString(R.string.text_datechosen,
+                        dateMadeString));
+            } else {
+                mDateMadeText.setVisibility(View.GONE);
+                Log.d(TAG, "populateDinnerText: No date found so TextView is hidden");
+            }
 
             String picPath = dinner.getString(dinner.getColumnIndexOrThrow(
                     DinnersDbContract.DinnerEntry.KEY_PICPATH));

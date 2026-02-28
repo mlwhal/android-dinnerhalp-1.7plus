@@ -11,6 +11,7 @@
         <item name="android:actionMenuTextColor">@color/colorActionIcon</item>
 
         <item name="android:alertDialogTheme">@style/Theme.DinnerHalp.CustomAlertDialog</item>
+        <item name="materialCalendarTheme">@style/ThemeOverlay.App.DatePicker</item>
     </style>
 
     <!-- Custom theme for action bar -->
@@ -96,6 +97,10 @@
         <!--        No longer working, now using colorOnSurface for unselected tab text -->
         <item name="tabTextAppearance">@style/TextAppearance.Design.Tab</item>
         <item name="colorOnSurface">@color/colorUnselectedText</item>
+    </style>
+
+    <style name="ThemeOverlay.App.DatePicker" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
     </style>
 
     <style name="Widget.Custom.Button.Borderless" parent="Widget.MaterialComponents.Button.UnelevatedButton">

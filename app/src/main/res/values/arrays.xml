@@ -18,6 +18,13 @@
         <item>@drawable/ic_import050</item>
     </array>
 
+    <string-array name="sort_order_array">
+        <item>A–Z</item>
+        <item>Z–A</item>
+        <item>Most recently made</item>
+        <item>Least recently made</item>
+    </string-array>
+
     <string-array name="pref_image_size_array">
         <item>Small</item>
         <item>Medium</item>

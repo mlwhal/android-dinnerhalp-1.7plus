@@ -32,11 +32,11 @@ class DinnersDbAdapter {
     private static final String DATABASE_CREATE =
             "create table dinners (_id integer primary key autoincrement, "
                     + "name text unique not null, method text not null, time text not null, "
-                    + "servings text not null, picpath text, recipe text, picdata blob);";
+                    + "servings text not null, datemade text, picpath text, recipe text, picdata blob);";
 
     private static final String DATABASE_NAME = "dinnerData.db";
     private static final String DATABASE_TABLE = DinnersDbContract.DinnerEntry.DATABASE_TABLE;
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private final Context mCtx;
 
@@ -53,13 +53,22 @@ class DinnersDbAdapter {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            //If database is being upgraded, add the picdata column
-//            Log.d(TAG, "onUpgrade is running");
+            //If database is being upgraded, add relevant new column
+            Log.d(TAG, "onUpgrade is running");
             if (newVersion > oldVersion) {
+                if (newVersion == 2) {
                 String alterString = "ALTER TABLE " + DATABASE_TABLE + " ADD COLUMN " +
                         DinnersDbContract.DinnerEntry.KEY_PICDATA + " BLOB";
                 db.execSQL(alterString);
-//                Log.d(TAG, "Database has been upgraded");
+//                Log.d(TAG, "Database has been upgraded from version 1 to 2");
+                }
+
+                if (newVersion == 3) {
+                    String alterString2 = "ALTER TABLE " + DATABASE_TABLE + " ADD COLUMN " +
+                            DinnersDbContract.DinnerEntry.KEY_DATEMADE + " TEXT";
+                    db.execSQL(alterString2);
+                    Log.d(TAG, "Database has been upgraded from version 2 to 3");
+                }
             }
         }
 
@@ -104,13 +113,14 @@ class DinnersDbAdapter {
      * @param method the cooking method of the dinner (stovetop, oven, slow cooker)
      * @param time the cook time
      * @param servings the number of servings
+     * @param datemade the date dinner was made
      * @param picpath file path for photo
      * @param picdata byte array for saving photo inside database
      * @param recipe text of recipe
      * @return rowId or -1 if failed
      */
     long createDinner(String name, String method, String time, String servings,
-                      String picpath, byte[] picdata, String recipe) {
+                      String datemade, String picpath, byte[] picdata, String recipe) {
         //If the user tries to create a dinner with no name, this is handled
         //in AddDinnerActivity
         ContentValues initialValues = new ContentValues();
@@ -118,6 +128,7 @@ class DinnersDbAdapter {
         initialValues.put(DinnersDbContract.DinnerEntry.KEY_METHOD, method);
         initialValues.put(DinnersDbContract.DinnerEntry.KEY_TIME, time);
         initialValues.put(DinnersDbContract.DinnerEntry.KEY_SERVINGS, servings);
+        initialValues.put(DinnersDbContract.DinnerEntry.KEY_DATEMADE, datemade);
         initialValues.put(DinnersDbContract.DinnerEntry.KEY_PICPATH, picpath);
         initialValues.put(DinnersDbContract.DinnerEntry.KEY_PICDATA, picdata);
         initialValues.put(DinnersDbContract.DinnerEntry.KEY_RECIPE, recipe);
@@ -168,6 +179,7 @@ class DinnersDbAdapter {
     //fetchDinnerSearch returns only rowID and name columns, since that's what is needed in
     //DinnerListActivity.
     //It's not recommended to return all columns because that loads more data than needed.
+    //Todo: Also return datemade so we can show it and sort by it
     //Todo: Also, shouldn't this throw SQLException?
 
     Cursor fetchDinnerSearch(boolean keywordSearch, String whereClause, String searchString) {
@@ -233,13 +245,14 @@ class DinnersDbAdapter {
      * @return true if the dinner was successfully updated, false otherwise
      * mDb.update() returns the number of rows updated in an int. Anything > 0 returns true.
      */
-    boolean updateDinner(long rowId, String name, String method, String time,
-                                String servings, String picpath, byte[] picdata, String recipe) {
+    boolean updateDinner(long rowId, String name, String method, String time, String servings,
+                         String datemade, String picpath, byte[] picdata, String recipe) {
         ContentValues args = new ContentValues();
         args.put(DinnersDbContract.DinnerEntry.KEY_NAME, name);
         args.put(DinnersDbContract.DinnerEntry.KEY_METHOD, method);
         args.put(DinnersDbContract.DinnerEntry.KEY_TIME, time);
         args.put(DinnersDbContract.DinnerEntry.KEY_SERVINGS, servings);
+        args.put(DinnersDbContract.DinnerEntry.KEY_DATEMADE, datemade);
         args.put(DinnersDbContract.DinnerEntry.KEY_PICPATH, picpath);
         args.put(DinnersDbContract.DinnerEntry.KEY_PICDATA, picdata);
         args.put(DinnersDbContract.DinnerEntry.KEY_RECIPE, recipe);
@@ -247,6 +260,16 @@ class DinnersDbAdapter {
         return mDb.update(DATABASE_TABLE, args,
                 DinnersDbContract.DinnerEntry.KEY_ROWID + "=" + rowId,
                 null) > 0;
+    }
+
+    //Method for clearing the date made from the db
+    int clearDateMade(long rowId) {
+        ContentValues values = new ContentValues();
+        values.putNull(DinnersDbContract.DinnerEntry.KEY_DATEMADE);
+        String whereClause = DinnersDbContract.DinnerEntry.KEY_ROWID + " = ?";
+        String[] whereArgs = { String.valueOf(rowId) };
+
+        return mDb.update(DATABASE_TABLE, values, whereClause, whereArgs);
     }
 
     //Method for deleting all rows in the database table

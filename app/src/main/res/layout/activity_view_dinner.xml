@@ -44,6 +44,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="0dp"
             android:paddingEnd="16dp"
+            android:paddingBottom="16dp"
             android:layout_gravity="center_vertical"
             android:text="@string/dinner_view_hint"
             style="@style/HintText"/>
@@ -94,12 +95,29 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView android:id="@+id/textview_servings"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="32dp"
-                    android:text="@string/spinner_servings"
-                    style="@style/ViewDinnerText"/>
+                    android:orientation="horizontal">
+
+                    <TextView android:id="@+id/textview_servings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="32dp"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="64dp"
+                        android:text="@string/spinner_servings"
+                        style="@style/ViewDinnerText"/>
+
+                    <TextView
+                        android:id="@+id/texview_datemade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_content_datemade"
+                        style="@style/ViewDinnerText"
+                        />
+
+                </LinearLayout>
 
                 <ImageView android:id="@+id/image_dinner_thumb"
                     android:layout_width="match_parent"

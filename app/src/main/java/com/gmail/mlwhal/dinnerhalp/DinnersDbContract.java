@@ -19,6 +19,7 @@ final class DinnersDbContract {
         static final String KEY_METHOD = "method";
         static final String KEY_TIME = "time";
         static final String KEY_SERVINGS = "servings";
+        static final String KEY_DATEMADE = "datemade";
         static final String KEY_PICPATH = "picpath";
         static final String KEY_PICDATA = "picdata";
         static final String KEY_RECIPE = "recipe";

@@ -52,8 +52,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:singleLine="true"
             android:text="@string/button_ok"
             style="@style/SmallButton"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <Spinner
+        android:id="@+id/spinner_sort"
+        android:contentDescription="@string/spinner_sort"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/touch_target_min"
+        android:layout_weight="1"/>
+        <!--android:prompt="@string/spinner_sort"
+        android:spinnerMode="dialog"-->
 
     </LinearLayout>
 

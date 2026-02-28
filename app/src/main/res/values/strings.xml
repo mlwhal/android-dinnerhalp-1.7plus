@@ -121,6 +121,10 @@
     <string name="spinner_method_descrip">Choose cooking method</string>
     <string name="spinner_time_descrip">Choose cooking time</string>
     <string name="spinner_servings_descrip">Choose number of servings</string>
+    <string name="image_add_datemade">Add a date for this dinner</string>
+    <string name="image_clear_datemade">Remove date from dinner</string>
+    <string name="text_datemade">Add a date</string>
+    <string name="text_datechosen">Last made\n%1$s</string>
     <string name="image_add_picture">Add picture</string>
     <string name="image_change_picture">Change picture</string>
     <string name="image_remove_picture">Remove picture</string>
@@ -155,6 +159,7 @@
     <string name="dinner_list_hint">Press and hold to select \nmultiple dinners</string>
     <string name="button_help">\?</string>
     <string name="button_ok">Got It</string>
+    <string name="spinner_sort">Sort list of dinners</string>
     <string name="no_dinners">No dinners found! Tap to add.</string>
     <string name="image_no_dinners">Tap to add a new dinner</string>
     <string name="title_activity_view_dinner">ViewDinnerActivity</string>
@@ -167,6 +172,7 @@
     <string name="spinner_method">Cooking method</string>
     <string name="spinner_time">Cooking time</string>
     <string name="spinner_servings">Servings</string>
+    <string name="text_content_datemade">Date last made</string>
     <string name="image_dinner_picture">Picture of current dinner</string>
     <string name="text_no_recipe">No recipe or keywords</string>
     <string name="intent_share_recipe">Share recipe to &#8230;</string>
@@ -178,6 +184,14 @@
     <string name="delete_alert_title">Delete this dinner?</string>
     <string name="alert_dialog_delete_ok">Delete</string>
     <string name="batch_delete_alert_title">Delete selected dinners?</string>
+
+    <!--Set date for dinner dialogs  -->
+<!--    <string name="date_alert_title">Are you making this dinner today?</string>-->
+<!--    <string name="date_alert_yes">Yes</string>-->
+    <string name="date_alert_choose">Set a date</string>"
+    <string name="date_alert_clear_title">Remove date from this dinner?</string>
+    <string name="date_alert_clear_message">This action can\'t be undone.</string>
+    <string name="alert_dialog_remove">Remove</string>
 
     <!--PreferencesFragment  -->
     <string name="pref_change_method_title">Custom categories</string>
@@ -228,7 +242,7 @@
     <string name="title_activity_about_app">AboutAppActivity</string>
     <string name="about_app_title">About DinnerHalp</string>
     <string name="about_app_class">com.gmail.mlwhal.dinnerhalp.AboutAppActivity</string>
-    <string name="text_about_app">DinnerHalp 1.10 by Marika Whaley \ncopyright 2015–2025</string>
+    <string name="text_about_app">DinnerHalp 1.11 by Marika Whaley \ncopyright 2015–2026</string>
     <string name="image_dinnerhalp_icon">DinnerHalp app icon</string>
 
     <string name="title_activity_settings">Settings</string>

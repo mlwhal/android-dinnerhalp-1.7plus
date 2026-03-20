@@ -44,6 +44,7 @@
             android:paddingStart="0dp"
             android:paddingEnd="16dp"
             android:layout_gravity="center_vertical"
+            android:layout_weight="0"
             android:text="@string/dinner_list_hint"
             style="@style/HintText"/>
 
@@ -52,9 +53,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:singleLine="true"
+            android:layout_weight="1"
             android:text="@string/button_ok"
             style="@style/SmallButton"/>
+        <!--            android:singleLine="true"-->
 
     </LinearLayout>
 

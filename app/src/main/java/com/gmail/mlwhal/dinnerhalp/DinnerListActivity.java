@@ -1,10 +1,7 @@
 package com.gmail.mlwhal.dinnerhalp;
 
-import android.app.Activity;
 import android.app.Dialog;
-//import android.app.DialogFragment;
 import androidx.appcompat.app.AppCompatDialogFragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -30,10 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
-//import java.util.Objects;
 
 
 public class DinnerListActivity extends AppCompatActivity {
@@ -48,6 +43,8 @@ public class DinnerListActivity extends AppCompatActivity {
     static final String KEYWORD_SEARCH = "KEYWORD_SEARCH";
     static final String SEARCH_COLUMN = "SEARCH_COLUMN";
     static final String SEARCH_STRING = "SEARCH_STRING";
+    static final String SORT_NAME = "SORT_NAME";
+    static final String SORT_DIRECTION = "SORT_DIRECTION";
     private Boolean mKeywordSearch;
     private String mSearchColumn;
     private String mSearchString;
@@ -58,6 +55,8 @@ public class DinnerListActivity extends AppCompatActivity {
     private TextView okButton;
 
     private Spinner mSortSpinner;
+    private Boolean mSortByName = true;
+    private Boolean mSortAsc = true;
 
     //TAG String used for logging
     private static final String TAG = DinnerListActivity.class.getSimpleName();
@@ -88,8 +87,32 @@ public class DinnerListActivity extends AppCompatActivity {
         mSortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
-                //Todo: Handle different sorting methods
-                Log.d(TAG, "Spinner item selected, pos is " + mSortSpinner.getItemAtPosition(pos));
+                if (pos == 0) {
+                    mSortByName = true;
+                    mSortAsc = true;
+                } else if (pos == 1) {
+                    mSortByName = true;
+                    mSortAsc = false;
+                } else if (pos == 2) {
+                    mSortByName = false;
+                    mSortAsc = false;
+                } else if (pos == 3) {
+                    mSortByName = false;
+                    mSortAsc = true;
+                }
+                Log.d(TAG, "Spinner item selected, pos is " + mSortSpinner.getItemAtPosition(pos) +
+                        "; Sort by name is " + mSortByName +
+                        "; Sort ascending is " + mSortAsc);
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(
+                        getApplicationContext());
+                //Todo: Right now, onCreate always resets the spinner to pos 0. Why is this??
+                sharedPref.edit().putBoolean(String.valueOf(R.string.sort_by_name_key),
+                        mSortByName).apply();
+                sharedPref.edit().putBoolean(String.valueOf(R.string.sort_asc_key),
+                        mSortAsc).apply();
+
+                //Run fillData with new sorting parameters
+                fillData(mKeywordSearch, mSearchColumn, mSearchString, mSortByName, mSortAsc);
             }
 
             @Override
@@ -128,7 +151,7 @@ public class DinnerListActivity extends AppCompatActivity {
 //        Log.d(TAG, "Keyword search is " + mKeywordSearch);
 //        Log.d(TAG, "Where clause is " + mSearchColumn);
 //        Log.d(TAG, "String to search is " + mSearchString);
-        fillData(mKeywordSearch, mSearchColumn, mSearchString);
+        fillData(mKeywordSearch, mSearchColumn, mSearchString, mSortByName, mSortAsc);
     }
 
     @Override
@@ -177,7 +200,8 @@ public class DinnerListActivity extends AppCompatActivity {
     }
 
     //Method to populate ListView with data from database
-    private void fillData(Boolean keywordSearch, String searchColumn, String searchString) {
+    private void fillData(Boolean keywordSearch, String searchColumn, String searchString,
+                          Boolean searchName, Boolean searchDirection) {
         mDbHelper.open();
         Cursor dinnerCursor;
         //Boolean to track whether the DinnerListActivity came from a search or from "show all"
@@ -189,25 +213,26 @@ public class DinnerListActivity extends AppCompatActivity {
         if (searchColumn != null) {
             queryDinnerList = true;
 //            Log.d(TAG, "SearchColumn not null, = " + searchColumn);
-            dinnerCursor = mDbHelper.fetchDinnerSearch(keywordSearch, searchColumn, searchString);
+            dinnerCursor = mDbHelper.fetchDinnerSearch(keywordSearch, searchColumn, searchString,
+                    searchName, searchDirection);
             startManagingCursor(dinnerCursor);
         } else {
             queryDinnerList = false;
             // Get all of the rows from the database and create the item list
-            dinnerCursor = mDbHelper.fetchAllDinners();
+            dinnerCursor = mDbHelper.fetchAllDinners(searchName, searchDirection);
             startManagingCursor(dinnerCursor);
         }
 
-        // Create an array to specify the fields we want to display in the list (only NAME)
-        String[] from = new String[] {DinnersDbContract.DinnerEntry.KEY_NAME};
+        // Create an array to specify the fields we want to display in the list (NAME and DATEMADE)
+        String[] from = new String[] {DinnersDbContract.DinnerEntry.KEY_NAME,
+                                        DinnersDbContract.DinnerEntry.KEY_DATEMADE};
 
-        // and an array of the fields we want to bind those fields to (in this case dinner_row)
-        //(Note I have no idea why to bind to a TextView here!)
-        int[] to = new int[] {R.id.dinner1};
+        // and an array of the fields we want to bind those fields to
+        int[] to = new int[] {R.id.dinner_name_item, R.id.dinner_date_item};
 
         // Now create a simple cursor adapter and set it to display
         final SimpleCursorAdapter dinners = new SimpleCursorAdapter(
-                this, R.layout.dinner_row, dinnerCursor, from, to
+                this, R.layout.dinner_list_row, dinnerCursor, from, to
         );
 
         final ListView lv = findViewById(R.id.listview_dinners);
@@ -357,6 +382,7 @@ public class DinnerListActivity extends AppCompatActivity {
     }
 
     //Method to find out whether Pro User Mode is on and handle help text accordingly
+    //Current sort order of list is also applied to the sort spinner here
     private void checkSharedPrefs() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean proModePref = sharedPref.getBoolean(getResources()
@@ -383,6 +409,23 @@ public class DinnerListActivity extends AppCompatActivity {
                     helpButton.setVisibility(View.VISIBLE);
                 }
             });
+        }
+        //Set spinner value if it's been stored previously
+        mSortByName = sharedPref.getBoolean(String.valueOf(R.string.sort_by_name_key), true);
+        mSortAsc = sharedPref.getBoolean(String.valueOf(R.string.sort_asc_key), true);
+        Log.d(TAG, "In checkSharedPrefs; mSortByName = " + mSortByName);
+        Log.d(TAG, "In checkSharedPrefs; mSortAsc = " + mSortAsc);
+        if (mSortByName && mSortAsc) {
+            mSortSpinner.setSelection(0);
+        }
+        if (mSortByName && !mSortAsc) {
+            mSortSpinner.setSelection(1);
+        }
+        if (!mSortByName && !mSortAsc) {
+            mSortSpinner.setSelection(2);
+        }
+        if (!mSortByName && mSortAsc) {
+            mSortSpinner.setSelection(3);
         }
 
     }
@@ -468,9 +511,11 @@ public class DinnerListActivity extends AppCompatActivity {
         savedInstanceState.putBoolean(KEYWORD_SEARCH, mKeywordSearch);
         savedInstanceState.putString(SEARCH_COLUMN, mSearchColumn);
         savedInstanceState.putString(SEARCH_STRING, mSearchString);
+        savedInstanceState.putBoolean(SORT_NAME, mSortByName);
+        savedInstanceState.putBoolean(SORT_DIRECTION, mSortAsc);
 
-//        Log.d(TAG, "SaveInstanceState! KeywordSearch is " + mKeywordSearch);
-//        Log.d(TAG, "SaveInstanceState! mSearchString is " + mSearchString);
+        Log.d(TAG, "SaveInstanceState! mSortByName is " + mSortByName);
+        Log.d(TAG, "SaveInstanceState! mSortAsc is " + mSortAsc);
 
         super.onSaveInstanceState(savedInstanceState);
 
@@ -482,21 +527,23 @@ public class DinnerListActivity extends AppCompatActivity {
         mKeywordSearch = savedInstanceState.getBoolean(KEYWORD_SEARCH);
         mSearchColumn = savedInstanceState.getString(SEARCH_COLUMN);
         mSearchString = savedInstanceState.getString(SEARCH_STRING);
-//        Log.d(TAG, "RestoreInstanceState! KeywordSearch is " + mKeywordSearch);
-//        Log.d(TAG, "RestoreInstanceState! mSearchString is " + mSearchString);
-        fillData(mKeywordSearch, mSearchColumn, mSearchString);
+        mSortByName = savedInstanceState.getBoolean(SORT_NAME);
+        mSortAsc = savedInstanceState.getBoolean(SORT_DIRECTION);
+        Log.d(TAG, "RestoreInstanceState! mSortByName is " + mSortByName);
+        Log.d(TAG, "RestoreInstanceState! mSortAsc is " + mSortAsc);
+        fillData(mKeywordSearch, mSearchColumn, mSearchString, mSortByName, mSortAsc);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-//        Log.d(TAG, "onResume! KeywordSearch is " + mKeywordSearch);
-//        Log.d(TAG, "onResume! mSearchString is " + mSearchString);
-        fillData(mKeywordSearch, mSearchColumn, mSearchString);
-
-        //Recheck SharedPreferences for pro mode value; update helpButton visibility
+        //Recheck SharedPreferences for pro mode value; update helpButton visibility; sort order
         checkSharedPrefs();
+        Log.d(TAG, "onResume! mSortByName is " + mSortByName);
+        Log.d(TAG, "onResume! mSortAsc is " + mSortAsc);
+        fillData(mKeywordSearch, mSearchColumn, mSearchString, mSortByName, mSortAsc);
+
     }
 
     public static class DeleteDialogFragment extends AppCompatDialogFragment {

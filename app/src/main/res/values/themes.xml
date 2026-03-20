@@ -50,6 +50,12 @@
         <item name="android:paddingBottom">8dp</item>
     </style>
 
+    <style name="DinnerDateText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorDefaultText</item>
+        <!--item name="android:paddingTop">8dp</item-->
+    </style>
+
     <style name="HintText">
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/colorHintText</item>

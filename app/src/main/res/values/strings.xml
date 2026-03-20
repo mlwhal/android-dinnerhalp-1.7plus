@@ -125,6 +125,7 @@
     <string name="image_clear_datemade">Remove date from dinner</string>
     <string name="text_datemade">Add a date</string>
     <string name="text_datechosen">Last made\n%1$s</string>
+    <string name="datemade_key">datemade_key</string>
     <string name="image_add_picture">Add picture</string>
     <string name="image_change_picture">Change picture</string>
     <string name="image_remove_picture">Remove picture</string>
@@ -165,6 +166,8 @@
     <string name="title_activity_view_dinner">ViewDinnerActivity</string>
     <string name="intent_share_subject">Recipes from DinnerHalp</string>
     <string name="intent_share_dialog_title">Share to &#8230;</string>
+    <string name="sort_by_name_key">sort_by_name</string>
+    <string name="sort_asc_key">"sort_asc"</string>
 
     <!--ViewDinnerActivity-->
     <string name="view_dinner_title">Dinner name here</string>
@@ -199,7 +202,7 @@
 
     <string name="pref_image_size_title">Image size</string>
     <string name="pref_image_size_sum">Set the size of images when viewing dinner \nCurrently
-    showing %s size</string>
+    showing: %s size</string>
     <string name="pref_image_size_key">pref_image_size</string>
     <string name="pref_image_size_dialog_title">Set image size to</string>
     <string name="pref_image_size_default">40</string>

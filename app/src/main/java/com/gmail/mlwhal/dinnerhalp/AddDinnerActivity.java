@@ -1,6 +1,5 @@
 package com.gmail.mlwhal.dinnerhalp;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -152,6 +151,12 @@ public class AddDinnerActivity extends AppCompatActivity {
 
         //Date made stuff
         mDateMadeText = findViewById(R.id.texview_datemade);
+        mDateMadeText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
         ImageButton mDateMadeButton = findViewById(R.id.button_add_datemade);
         mDateMadeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -295,6 +300,21 @@ public class AddDinnerActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(DinnersDbContract.DinnerEntry.KEY_ROWID, mRowId);
+        if (mDateMade != null) {
+            outState.putString(String.valueOf(R.string.datemade_key), mDateMade);
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle inState) {
+        super.onRestoreInstanceState(inState);
+        mDateMade = inState.getString(String.valueOf(R.string.datemade_key), null);
+        Log.d(TAG, "RestoreState: mDateMade = " + mDateMade);
+        if (mDateMade != null) {
+            mDateMadeText.setText(getString(R.string.text_datechosen,
+                    mDateMade));
+            mDateClearButton.setVisibility(View.VISIBLE);
+        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
@@ -906,5 +926,6 @@ public class AddDinnerActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         checkSharedPrefs();
+//        Log.d(TAG, "onResume: mDateMade is " + mDateMade);
     }
 }

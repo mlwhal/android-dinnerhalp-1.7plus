@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView android:id="@+id/dinner_name_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="top"
+        android:gravity="start"
+        android:paddingStart="0dp"
+        android:paddingEnd="16dp"
+        android:background="?android:attr/activatedBackgroundIndicator"
+        style="@style/DinnerListText"
+        android:text="Dinner name text"
+        />
+
+    <TextView android:id="@+id/dinner_date_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:layout_gravity="top"
+        android:gravity="end"
+        android:background="?android:attr/activatedBackgroundIndicator"
+        android:text="Date text"
+        style="@style/DinnerDateText"
+        />
+</LinearLayout>

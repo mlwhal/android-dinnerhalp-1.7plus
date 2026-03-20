@@ -8,9 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.sql.Blob;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -157,37 +155,41 @@ class DinnersDbAdapter {
      * whereArgs, groupBy, having, orderBy
      */
 
-    //fetchAllDinners only fetches rowID and name columns, since that's what is needed in
+    //fetchAllDinners only fetches rowID, name, and datemade columns, since that's what is needed in
     //DinnerListActivity.
     //It's not recommended to return all columns because that loads more data than needed.
 
-    Cursor fetchAllDinners() {
+    Cursor fetchAllDinners(boolean sortByName, boolean sortAsc) {
 
         //Create string array to hold names of columns to be fetched
         String[] tableColumns = new String[] {
                 DinnersDbContract.DinnerEntry.KEY_ROWID,
-                DinnersDbContract.DinnerEntry.KEY_NAME
+                DinnersDbContract.DinnerEntry.KEY_NAME,
+                DinnersDbContract.DinnerEntry.KEY_DATEMADE
         };
 
+        String orderByString = getOrderByString(sortByName, sortAsc);
+
         return mDb.query(DATABASE_TABLE, tableColumns, null, null,
-                null, null,  DinnersDbContract.DinnerEntry.KEY_NAME + " ASC");
+                null, null, orderByString);
     }
 
     /**
      * Return a Cursor with all dinners that match a query on a particular column
      */
-    //fetchDinnerSearch returns only rowID and name columns, since that's what is needed in
+    //fetchDinnerSearch returns only rowID, name, and datemade columns, since that's what is needed in
     //DinnerListActivity.
     //It's not recommended to return all columns because that loads more data than needed.
-    //Todo: Also return datemade so we can show it and sort by it
-    //Todo: Also, shouldn't this throw SQLException?
+    //Todo: Shouldn't this throw SQLException?
 
-    Cursor fetchDinnerSearch(boolean keywordSearch, String whereClause, String searchString) {
+    Cursor fetchDinnerSearch(boolean keywordSearch, String whereClause, String searchString,
+                             boolean sortByName, boolean sortAsc) {
 
         //Create string array to hold names of columns to be fetched
         String[] tableColumns = new String[] {
                 DinnersDbContract.DinnerEntry.KEY_ROWID,
-                DinnersDbContract.DinnerEntry.KEY_NAME
+                DinnersDbContract.DinnerEntry.KEY_NAME,
+                DinnersDbContract.DinnerEntry.KEY_DATEMADE
         };
 
         String[] whereArgs;
@@ -205,8 +207,10 @@ class DinnersDbAdapter {
             };
         }
 
-        return mDb.query(DATABASE_TABLE, tableColumns, whereClause, whereArgs, null, null,
-                 DinnersDbContract.DinnerEntry.KEY_NAME + " ASC");
+        String orderByString = getOrderByString(sortByName, sortAsc);
+
+        return mDb.query(DATABASE_TABLE, tableColumns, whereClause, whereArgs, null,
+                null, orderByString);
     }
 
     /**
@@ -262,15 +266,42 @@ class DinnersDbAdapter {
                 null) > 0;
     }
 
-    //Method for clearing the date made from the db
-    int clearDateMade(long rowId) {
-        ContentValues values = new ContentValues();
-        values.putNull(DinnersDbContract.DinnerEntry.KEY_DATEMADE);
-        String whereClause = DinnersDbContract.DinnerEntry.KEY_ROWID + " = ?";
-        String[] whereArgs = { String.valueOf(rowId) };
+    //Method that uses sorting parameters to determine how the data should be ordered
+    //This is needed in two places, hence the separate method.
+    //If sorting by date, a secondary sort statement ensures remaining dinners are A-Z
+    String getOrderByString(boolean sortByName, boolean sortAsc) {
+        String orderByString = null;
+        if (sortByName && sortAsc) {
+            orderByString = DinnersDbContract.DinnerEntry.KEY_NAME + " ASC";
+        }
+        if (sortByName && !sortAsc) {
+            orderByString = DinnersDbContract.DinnerEntry.KEY_NAME + " DESC";
+        }
+        if (!sortByName && !sortAsc) {
+            orderByString = DinnersDbContract.DinnerEntry.KEY_DATEMADE + " DESC, " +
+                    DinnersDbContract.DinnerEntry.KEY_NAME + " ASC";
+        }
+        if (!sortByName && sortAsc) {
+            orderByString = DinnersDbContract.DinnerEntry.KEY_DATEMADE + " ASC, " +
+                    DinnersDbContract.DinnerEntry.KEY_NAME + " ASC";
+        }
+        Log.d(TAG, "In getOrderByString: orderByString is " + orderByString);
+        return orderByString;
 
-        return mDb.update(DATABASE_TABLE, values, whereClause, whereArgs);
     }
+
+//    //Method for clearing just the date made from a db row
+//    //Currently unused because all columns are updated in AddDinnerActivity at once.
+//    //Use this if you want to update just the date made in ViewDinnerActivity
+//    //Although this doesn't update, just clears, but it's a start!
+//    int clearDateMade(long rowId) {
+//        ContentValues values = new ContentValues();
+//        values.putNull(DinnersDbContract.DinnerEntry.KEY_DATEMADE);
+//        String whereClause = DinnersDbContract.DinnerEntry.KEY_ROWID + " = ?";
+//        String[] whereArgs = { String.valueOf(rowId) };
+//
+//        return mDb.update(DATABASE_TABLE, values, whereClause, whereArgs);
+//    }
 
     //Method for deleting all rows in the database table
     int clearAllDinners() {

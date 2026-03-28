@@ -41,11 +41,10 @@ class ImageHandler {
         int width = metrics.widthPixels;
 
         //Multiply device width by mImageScalePref to get preferred size for image
-        long imageWidthPref = Math.round(width * (imageScalePref * 0.01));
-//        Log.d(TAG, "Screen width is " + width + " pixels");
+        //        Log.d(TAG, "Screen width is " + width + " pixels");
 //        Log.d(TAG, "Scale factor is " + imageScalePref);
 //        Log.d(TAG, "Preferred image width is " + imageWidthPref);
-        return imageWidthPref;
+        return Math.round(width * (imageScalePref * 0.01));
     }
 
     //Method to downsample large images read from Uri before loading into ImageView

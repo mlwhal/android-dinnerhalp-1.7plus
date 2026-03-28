@@ -7,14 +7,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
-//import java.util.Objects;
-//import java.util.Locale;
 
 //import android.app.AlertDialog;
 import android.app.Dialog;
@@ -28,14 +26,11 @@ import android.content.res.TypedArray;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
-//import androidx.annotation.Nullable;
-//import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
-//import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.FragmentPagerAdapter;
 import android.os.Bundle;
 
@@ -949,7 +944,7 @@ public class MainActivity extends AppCompatActivity {
                 InputStream inputDBStream = getContentResolver().openInputStream(fileUri);
                 File currentDB = getApplicationContext()
                         .getDatabasePath(getString(R.string.filename_full_sharedb));
-                OutputStream outputDBStream = new FileOutputStream(currentDB);
+                OutputStream outputDBStream = Files.newOutputStream(currentDB.toPath());
                 byte[] buffer = new byte[1024];
                 int bytesRead;
                 if (inputDBStream != null) {
@@ -1188,6 +1183,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             //Create and launch share intent
+            //Todo: Try adding EXTRA_TITLE with preferred filename to fix bug uploading to Drive,
+            //which chooses the EXTRA_SUBJECT as the filename
             if (fileUri != null) {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("*/*");

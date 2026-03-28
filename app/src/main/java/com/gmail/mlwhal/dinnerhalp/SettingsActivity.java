@@ -13,8 +13,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.Objects;
-
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -26,6 +24,7 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             Log.d(TAG, "Prefs changed; key is " + key);
+            assert key != null;
             if (key.equals("pref_theme") ) {
                 String darkModePref = sharedPreferences.getString(key, "MODE_NIGHT_FOLLOW_SYSTEM");
                 switch (darkModePref) {

@@ -23,7 +23,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-//import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -36,16 +35,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-//import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
-//import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-//import java.time.ZonedDateTime;
-//import java.util.Calendar;
-//import java.util.Locale;
-//import java.util.Objects;
 
 public class AddDinnerActivity extends AppCompatActivity {
 

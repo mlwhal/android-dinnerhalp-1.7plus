@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 //import com.google.android.material.datepicker.MaterialDatePicker;
 //import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.gmail.mlwhal.dinnerhalp.ui.main.ActivityLayouts;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.FileNotFoundException;
@@ -63,6 +64,9 @@ public class ViewDinnerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_dinner);
+
+        //Handle edge to edge insets
+        ActivityLayouts.applyEdgeToEdge(this, R.id.content);
 
         mDbHelper = new DinnersDbAdapter(this);
 

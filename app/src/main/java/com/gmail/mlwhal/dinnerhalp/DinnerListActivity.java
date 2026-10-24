@@ -26,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gmail.mlwhal.dinnerhalp.ui.main.ActivityLayouts;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
@@ -64,6 +65,9 @@ public class DinnerListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dinner_list);
+
+        //Handle edge to edge insets
+        ActivityLayouts.applyEdgeToEdge(this, R.id.content);
 
         //Initialize hint TextView and buttons that show and dismiss it
         helpButton = findViewById(R.id.button_help);

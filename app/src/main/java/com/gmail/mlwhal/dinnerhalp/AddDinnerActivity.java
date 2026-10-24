@@ -29,6 +29,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gmail.mlwhal.dinnerhalp.ui.main.ActivityLayouts;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -78,6 +79,9 @@ public class AddDinnerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_dinner);
+
+        //Handle edge to edge
+        ActivityLayouts.applyEdgeToEdge(this, R.id.content);
 
         //Handle cases where this activity is getting content from another app
         Intent shareIntent = getIntent();

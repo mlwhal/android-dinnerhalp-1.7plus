@@ -9,9 +9,14 @@
         <item name="colorOnSecondary">@color/colorKnockout</item>
         <item name="actionBarTheme">@style/ThemeOverlay.DinnerHalp.ActionBar</item>
         <item name="android:actionMenuTextColor">@color/colorActionIcon</item>
+        <!--  FAB color and text      -->
+        <item name="colorPrimaryContainer">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimaryContainer">@color/colorKnockout</item>
 
         <item name="android:alertDialogTheme">@style/Theme.DinnerHalp.CustomAlertDialog</item>
         <item name="materialCalendarTheme">@style/ThemeOverlay.App.DatePicker</item>
+        <!--  Keep content from overlapping device cutout  -->
+        <item name="android:windowLayoutInDisplayCutoutMode">never</item>
     </style>
 
     <!-- Custom theme for action bar -->

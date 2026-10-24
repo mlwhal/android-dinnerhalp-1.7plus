@@ -51,6 +51,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gmail.mlwhal.dinnerhalp.ui.main.ActivityLayouts;
 import com.gmail.mlwhal.dinnerhalp.ui.main.SectionsPagerAdapter;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -89,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Handle edge to edge
+        ActivityLayouts.applyEdgeToEdge(this, R.id.content);
 
         //Get info from extras to determine which tab to show; mFragmentTracker is then used by
         //mViewPager to select the initial tab
@@ -344,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
             int title = getArguments().getInt("title");
 
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity(),
-                    R.style.Theme_DinnerHalp_CustomAlertDialog);
+                    R.style.ThemeOverlay_App_MaterialAlertDialog);
             //Get the layout inflater
             LayoutInflater inflater = requireActivity().getLayoutInflater();
             //Cast the Dialog as a View so I can get text out of the EditText
@@ -410,7 +414,7 @@ public class MainActivity extends AppCompatActivity {
 
 //            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity(),
-                    R.style.Theme_DinnerHalp_CustomAlertDialog);
+                    R.style.ThemeOverlay_App_MaterialAlertDialog);
             builder.setTitle(title)
                     .setItems(R.array.method_array, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int position) {
@@ -453,7 +457,7 @@ public class MainActivity extends AppCompatActivity {
 
 //            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity(),
-                    R.style.Theme_DinnerHalp_CustomAlertDialog);
+                    R.style.ThemeOverlay_App_MaterialAlertDialog);
             builder.setTitle(title)
                     .setItems(R.array.time_array, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int position) {
@@ -498,7 +502,7 @@ public class MainActivity extends AppCompatActivity {
 
 //            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity(),
-                    R.style.Theme_DinnerHalp_CustomAlertDialog);
+                    R.style.ThemeOverlay_App_MaterialAlertDialog);
             builder.setTitle(title)
                     .setItems(R.array.servings_array, new DialogInterface.OnClickListener() {
                         @Override
@@ -664,7 +668,7 @@ public class MainActivity extends AppCompatActivity {
             assert getArguments() != null;
             int title = getArguments().getInt("title");
 
-            return new MaterialAlertDialogBuilder(getActivity(), R.style.Theme_DinnerHalp_CustomAlertDialog)
+            return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_App_MaterialAlertDialog)
                     .setTitle(title)
                     .setPositiveButton(R.string.alert_dialog_delete_ok,
                             (dialog, whichButton) -> ((MainActivity) requireActivity()).delAllDinners()
@@ -755,7 +759,7 @@ public class MainActivity extends AppCompatActivity {
             int fileCount = getArguments().getInt("filecount");
 
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(),
-                    R.style.Theme_DinnerHalp_CustomAlertDialog).setTitle(title);
+                    R.style.ThemeOverlay_App_MaterialAlertDialog).setTitle(title);
             builder.setMessage(text);
             builder.setNegativeButton(R.string.button_cancel,
                     (dialog, whichButton) -> ((MainActivity) requireActivity())
@@ -887,7 +891,7 @@ public class MainActivity extends AppCompatActivity {
             //Create custom view that holds both explanatory text and the listView
             // containing the filePaths. You can't use setItems here but rather setAdapter
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(),
-                    R.style.Theme_DinnerHalp_CustomAlertDialog).setTitle(title);
+                    R.style.ThemeOverlay_App_MaterialAlertDialog).setTitle(title);
             LayoutInflater inflater = getActivity().getLayoutInflater();
             View view = inflater.inflate(R.layout.dialog_choose_dbfile, null);
             //Put warning text into dialog TextView
@@ -1000,7 +1004,7 @@ public class MainActivity extends AppCompatActivity {
             int title = getArguments().getInt("title");
             int text = getArguments().getInt("text");
 
-            return new MaterialAlertDialogBuilder(getActivity(), R.style.Theme_DinnerHalp_CustomAlertDialog)
+            return new MaterialAlertDialogBuilder(getActivity(), R.style.ThemeOverlay_App_MaterialAlertDialog)
                     .setTitle(title)
                     .setMessage(text)
                     .setPositiveButton(R.string.import_positive_button,
@@ -1190,7 +1194,7 @@ public class MainActivity extends AppCompatActivity {
                 shareIntent.setType("*/*");
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.intent_sharedb_subject));
                 shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.intent_sharedb_message));
-//            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(backupDB));
+                shareIntent.putExtra(Intent.EXTRA_TITLE, filename);
                 //Grant permission to read fileUri
                 shareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 shareIntent.setClipData(ClipData.newRawUri("", fileUri));

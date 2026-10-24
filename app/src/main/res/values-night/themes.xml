@@ -16,6 +16,9 @@
         <item name="actionBarTheme">@style/ThemeOverlay.DinnerHalp.ActionBar</item>
         <item name="alertDialogTheme">@style/Theme.DinnerHalp.NightAlertDialog</item>
         <item name="materialCalendarTheme">@style/ThemeOverlay.App.NightDatePicker</item>
+        <!--  FAB color and text      -->
+        <item name="colorPrimaryContainer">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimaryContainer">@color/colorKnockout</item>
         <!-- Color for active toggles and edit text fields everywhere but DinnerListActivity -->
         <item name="android:colorControlActivated">@color/colorDefaultText</item>
     </style>

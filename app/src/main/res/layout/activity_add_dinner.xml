@@ -2,206 +2,214 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/content"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.gmail.mlwhal.dinnerhalp.AddDinnerActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/section_label"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/touch_target_min"
-            android:paddingBottom="8dp"
-            android:text="@string/add_dinner_title"
-            style="@style/HeaderText" />
-
-        <TextView
-            android:id="@id/button_help"
-            android:background="@drawable/rounded_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:text="@string/button_help"
-            style="@style/HelpButton"
-            tools:ignore="RelativeOverlap" />
-
-    </RelativeLayout>
-
+<!--    Wrapper layout to add padding, thanks to edge-to-edge  -->
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/hint_text"
-            style="@style/HintText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="0"
-            android:paddingStart="0dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="16dp"
-            android:text="@string/dinner_add_hint" />
-
-        <TextView
-            android:id="@+id/button_ok"
-            android:background="@drawable/rounded_button"
-            style="@style/SmallButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:text="@string/button_ok" />
-
-    </LinearLayout>
-
-    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/section_label"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/touch_target_min"
+                android:paddingBottom="8dp"
+                android:text="@string/add_dinner_title"
+                style="@style/HeaderText" />
+
+            <TextView
+                android:id="@id/button_help"
+                android:background="@drawable/rounded_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="@string/button_help"
+                style="@style/HelpButton"
+                tools:ignore="RelativeOverlap" />
+
+        </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/section_dinner_details"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/edittext_name"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/hint_text"
+                style="@style/HintText"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/dinner_name_hint"
-                android:importantForAutofill="no"
-                android:imeActionLabel="@string/button_done"
-                android:inputType="textCapSentences|textAutoCorrect"
-                android:paddingBottom="16dp" />
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0"
+                android:paddingStart="0dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp"
+                android:text="@string/dinner_add_hint" />
+
+            <TextView
+                android:id="@+id/button_ok"
+                android:background="@drawable/rounded_button"
+                style="@style/SmallButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="@string/button_ok" />
+
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Spinner
-                    android:id="@+id/spinner_method"
-                    android:contentDescription="@string/spinner_method_descrip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/touch_target_min"
-                    android:layout_weight="1"
-                    android:paddingStart="0dp"
-                    android:paddingEnd="50dp" />
-
-                <Spinner
-                    android:id="@+id/spinner_time"
-                    android:contentDescription="@string/spinner_time_descrip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/touch_target_min"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/section_dinner_details"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <Spinner
-                    android:id="@+id/spinner_servings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/touch_target_min"
-                    android:contentDescription="@string/spinner_servings_descrip"
-                    android:paddingBottom="16dp"
-                    android:paddingStart="0dp"
-                    android:paddingEnd="64dp"
-                    />
+                <EditText
+                    android:id="@+id/edittext_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/dinner_name_hint"
+                    android:importantForAutofill="no"
+                    android:imeActionLabel="@string/button_done"
+                    android:inputType="textCapSentences|textAutoCorrect"
+                    android:paddingBottom="16dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="top"
                     android:orientation="horizontal">
 
-                    <ImageButton
-                        android:id="@+id/button_add_datemade"
+                    <Spinner
+                        android:id="@+id/spinner_method"
+                        android:contentDescription="@string/spinner_method_descrip"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/image_add_datemade"
-                        android:minWidth="48dp"
-                        android:paddingTop="2dp"
-                        android:src="@drawable/ic_add_datemade"
-                        style="?android:borderlessButtonStyle"
-                        />
-
-                    <TextView
-                        android:id="@+id/texview_datemade"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/touch_target_min"
+                        android:layout_weight="1"
                         android:paddingStart="0dp"
-                        android:paddingEnd="20dp"
-                        android:paddingTop="0dp"
-                        android:text="@string/text_datemade"
-                        style="@style/DinnerDateText"
-                        />
+                        android:paddingEnd="50dp" />
 
-                    <ImageButton
-                        android:id="@+id/button_clear_datemade"
+                    <Spinner
+                        android:id="@+id/spinner_time"
+                        android:contentDescription="@string/spinner_time_descrip"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/image_clear_datemade"
-                        android:paddingTop="2dp"
-                        android:padding="0dp"
-                        android:src="@drawable/ic_clear_datemade"/>
+                        android:layout_height="@dimen/touch_target_min"
+                        android:layout_weight="1" />
+
                 </LinearLayout>
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/button_add_image"
-                style="?android:borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/image_add_picture"
-                android:src="@drawable/ic_new_picture" />
+                    <Spinner
+                        android:id="@+id/spinner_servings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/touch_target_min"
+                        android:contentDescription="@string/spinner_servings_descrip"
+                        android:paddingBottom="16dp"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="64dp"
+                        />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:id="@+id/button_add_datemade"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@string/image_add_datemade"
+                            android:minWidth="48dp"
+                            android:paddingTop="2dp"
+                            android:src="@drawable/ic_add_datemade"
+                            style="?android:borderlessButtonStyle"
+                            />
+
+                        <TextView
+                            android:id="@+id/texview_datemade"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="20dp"
+                            android:paddingTop="0dp"
+                            android:text="@string/text_datemade"
+                            style="@style/DinnerDateText"
+                            />
+
+                        <ImageButton
+                            android:id="@+id/button_clear_datemade"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@string/image_clear_datemade"
+                            android:paddingTop="2dp"
+                            android:padding="0dp"
+                            android:src="@drawable/ic_clear_datemade"/>
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <ImageButton
-                    android:id="@+id/button_change_image"
-                    style="?android:borderlessButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@string/image_change_picture"
-                    android:src="@drawable/ic_change_picture" />
-
-                <ImageButton
-                    android:id="@+id/button_remove_image"
+                    android:id="@+id/button_add_image"
                     style="?android:borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="@string/image_remove_picture"
-                    android:src="@drawable/ic_remove_picture" />
+                    android:contentDescription="@string/image_add_picture"
+                    android:src="@drawable/ic_new_picture" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/button_change_image"
+                        style="?android:borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/image_change_picture"
+                        android:src="@drawable/ic_change_picture" />
+
+                    <ImageButton
+                        android:id="@+id/button_remove_image"
+                        style="?android:borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/image_remove_picture"
+                        android:src="@drawable/ic_remove_picture" />
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/edittext_recipe"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/recipe_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:paddingTop="16dp" />
 
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/edittext_recipe"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/recipe_hint"
-                android:importantForAutofill="no"
-                android:inputType="textCapSentences|textMultiLine"
-                android:paddingTop="16dp" />
+        </ScrollView>
 
-        </LinearLayout>
-
-    </ScrollView>
-
+    </LinearLayout>
 </LinearLayout>

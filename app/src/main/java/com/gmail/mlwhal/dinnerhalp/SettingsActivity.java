@@ -4,14 +4,21 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class SettingsActivity extends AppCompatActivity {
@@ -106,6 +113,30 @@ public class SettingsActivity extends AppCompatActivity {
             } else {
                 addPreferencesFromResource(R.xml.preferences_pre29);
             }
+        }
+
+        //I know not why, but insets only work when applied inside of onViewCreated
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+
+            //Handle window insets for edge-to-edge
+            ViewCompat.setOnApplyWindowInsetsListener(view,
+                    (v, windowInsets) -> {
+                        Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+                        Log.d("ActivityLayouts", "Current activity is SettingsActivity");
+                        Log.d("ActivityLayouts", "Top inset is + " + insets.top);
+                        Log.d("ActivityLayouts", "Bottom inset is + " + insets.bottom);
+                        Log.d("ActivityLayouts", "Left inset is + " + insets.left);
+                        Log.d("ActivityLayouts", "Right inset is + " + insets.right);
+                        // Apply the insets paddings to the view.
+                        v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+
+                        // Return WindowInsetsCompat.CONSUMED if you don't want the window insets to keep being
+                        // passed down to descendant views. Otherwise return windowInsets
+//            return WindowInsetsCompat.CONSUMED;
+                        return windowInsets;
+                    });
         }
 
         @Override

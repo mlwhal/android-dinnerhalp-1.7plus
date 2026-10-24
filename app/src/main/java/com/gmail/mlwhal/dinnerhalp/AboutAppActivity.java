@@ -2,9 +2,12 @@ package com.gmail.mlwhal.dinnerhalp;
 
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.gmail.mlwhal.dinnerhalp.ui.main.ActivityLayouts;
 
 public class AboutAppActivity extends AppCompatActivity {
 
@@ -12,6 +15,25 @@ public class AboutAppActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_app);
+
+        //Handle edge to edge insets
+        ActivityLayouts.applyEdgeToEdge(this, R.id.content);
+
+//        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content),
+//                (v, windowInsets) -> {
+//                    Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+//                    Log.d("AboutApp", "Top inset is + " + insets.top);
+//                    Log.d("AboutApp", "Bottom inset is + " + insets.bottom);
+//                    Log.d("AboutApp", "Left inset is + " + insets.left);
+//                    Log.d("AboutApp", "Right inset is + " + insets.right);
+//                    // Apply the insets paddings to the view.
+//                    v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+//
+//                    // Return CONSUMED if you don't want the window insets to keep being
+//                    // passed down to descendant views.
+//                    return WindowInsetsCompat.CONSUMED;
+//                    });
     }
 
     @Override
